@@ -1,0 +1,78 @@
+import mongoose, { Schema, Document, Types } from 'mongoose';
+import { hashPassword } from '../utils/auth';
+
+export interface IStudent extends Document {
+    student_id: string;
+    firstname: string;
+    middlename?: string;
+    lastname: string;
+    course: Types.ObjectId;
+    gender: string;
+    email: string;
+    password: string;
+}
+
+// Define the schema
+const StudentSchema: Schema<IStudent> = new Schema(
+    {
+        student_id: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true,
+        },
+        firstname: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        middlename: {
+            type: String,
+            required: false,
+            trim: true,
+        },
+        lastname: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        course: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            trim: true,
+        },
+            gender: {
+            type: String,
+            required: true,
+            enum: ['Male', 'Female'],
+            trim: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            lowercase: true,
+            trim: true,
+        },
+        password: {
+            type: String,
+            required: true,
+            minlength: 8,
+        },
+    },
+    { timestamps: true }
+);
+
+// Hash password before save
+StudentSchema.pre<IStudent>('save', async function (next) {
+    if (!this.isModified('password')) {
+        return next();
+    }
+    this.password = await hashPassword(this.password);
+    next();
+});
+
+// Create the model
+const Student = mongoose.model<IStudent>('Student', StudentSchema);
+
+export default Student;

@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import adminRoutes from './routes/admin.route';
 import authRoutes from './routes/auth.route';
+import courseRoutes from './routes/course.route';
 
 const app = express();
 
@@ -22,5 +23,6 @@ app.use(express.urlencoded());
 
 app.use('/api/admins', adminRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/courses', courseRoutes);
 
 export default app

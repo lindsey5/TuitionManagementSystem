@@ -9,6 +9,7 @@ import {
     ChevronLeft,
     ChevronRight,
     Bell,
+    BookOpen,
 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -19,6 +20,7 @@ export default function AdminSidebar() {
 
     const menuItems = [
         { id: 'dashboard', icon: Home, label: 'Dashboard', path: '/admin' },
+        { id: 'courses', icon: BookOpen, label: 'Courses', path: '/admin/courses' },
         { id: 'students', icon: Users, label: 'Students', path: '/admin/students' },
         { id: 'payments', icon: DollarSign, label: 'Payments', path: '/admin/payments' },
         { id: 'notifications', icon: Bell, label: 'Notifications', path: '/admin/notifications' },
