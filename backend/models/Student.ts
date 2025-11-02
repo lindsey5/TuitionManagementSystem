@@ -38,10 +38,11 @@ const StudentSchema: Schema<IStudent> = new Schema(
         },
         course: {
             type: Schema.Types.ObjectId,
+            ref: 'Course',
             required: true,
             trim: true,
         },
-            gender: {
+        gender: {
             type: String,
             required: true,
             enum: ['Male', 'Female'],

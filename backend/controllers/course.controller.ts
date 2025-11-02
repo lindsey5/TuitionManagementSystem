@@ -26,14 +26,23 @@ export const createCourse = async (req: Request, res : Response) => {
             return;
         }
 
-        let course = await Course.findOne({ name, code, status: 'removed' });
+        let course = await Course.findOne({  
+            $or: [
+                { name },
+                { code }
+            ],
+            status: 'removed' }
+        );
         if(course){
+            course.name = name;
+            course.code = code;
             course.status = 'active';
+            course.createdAt = new Date();
             course = await course.save();
         }else{
             course = await Course.create({ name, code }); 
         }
-        
+        console.log(course)
         res.status(201).json({ success: true , course});
 
     }catch(error : any){

@@ -4,6 +4,7 @@ export interface ICourse extends Document {
     name: string;
     code: string;
     status: 'active' | 'removed';
+    createdAt: Date;
 }
 
 // Define the schema

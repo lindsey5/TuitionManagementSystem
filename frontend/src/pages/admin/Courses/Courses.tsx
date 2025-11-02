@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AddButton, DeleteButton, EditButton } from "../../../components/Button";
 import { Title } from "../../../components/Text";
-import CourseModal from "./components/Course";
+import CourseModal from "./ui/Course";
 import useFetch from "../../../hooks/useFetch";
 import PurpleTable from "../../../components/Table";
 import { CircularProgress } from "@mui/material";

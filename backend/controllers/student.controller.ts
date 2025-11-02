@@ -64,3 +64,46 @@ export const getAllStudents = async (req : Request, res : Response) => {
         res.status(500).json({ message: error.message || "Server Error" });   
     }
 }
+
+export const editStudent = async (req : Request, res : Response) => {
+    try{
+        const { id } = req.params;
+        
+        const isEmailExist = await Student.findOne({ email: req.body.email, _id: { $ne: id} });
+        if(isEmailExist){
+            res.status(409).json({ message: 'Email already exists'});
+            return;
+        }
+
+        const isStudentIdExist = await Student.findOne({ student_id: req.body.student_id, _id: { $ne: id }})
+
+        if(isStudentIdExist){
+            res.status(409).json({ message: 'Student ID already exists'});
+            return;
+        }
+
+        const student = await Student.findByIdAndUpdate(id, req.body, { new: true });
+        if(!student){
+            res.status(404).json({ message: "Student not found" });
+            return;
+        }
+        res.status(200).json({ success: true, student });
+
+    }catch(error : any){
+        res.status(500).json({ message: error.message || "Server Error" });   
+    }
+}
+
+export const deleteStudent = async (req : Request, res : Response) => {
+    try{
+        const student  = await Student.findOneAndDelete({ _id: req.params.id });
+        if(!student){
+            res.status(404).json({ message: 'Student not found.'});
+            return;
+        }
+        res.status(200).json({ success: true, message: 'Student successfully deleted.'})
+
+    }catch(error : any){
+        res.status(500).json({ message: error.message || "Server Error" });   
+    }
+}

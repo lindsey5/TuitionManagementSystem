@@ -3,6 +3,7 @@ import LoginPage from "./pages/auth/Login";
 import AdminLayout from "./layouts/AdminLayout";
 import Students from "./pages/admin/Students/Students";
 import Courses from "./pages/admin/Courses/Courses";
+import Subjects from "./pages/admin/Subjects/Subjects";
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
         <Route path="admin" element={<AdminLayout />}>
           <Route path="courses" element={<Courses />} />
           <Route path="students" element={<Students />} />
+          <Route path="subjects" element={<Subjects />} />
         </Route>
       </Routes>
     </BrowserRouter>

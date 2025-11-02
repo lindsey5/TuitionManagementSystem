@@ -1,7 +1,9 @@
 import SibApiV3Sdk from 'sib-api-v3-sdk';
 import { IStudent } from '../models/Student';
+import dotenv from "dotenv";
 
-// ✅ Initialize Brevo API client once
+dotenv.config();
+
 const brevoClient = SibApiV3Sdk.ApiClient.instance;
 brevoClient.authentications['api-key'].apiKey = process.env.BREVO_API_KEY as string;
 
@@ -20,7 +22,7 @@ export const sendStudentEmail = async (student: IStudent, password: string) => {
         `;
 
         const emailData = {
-        sender: { name: 'Your School Name', email: process.env.EMAIL_USER },
+        sender: { name: 'Tuition Management System', email: process.env.EMAIL_USER },
         to: [{ email: student.email, name: `${student.firstname} ${student.lastname}` }],
         subject: 'Student Account Information',
         htmlContent,
