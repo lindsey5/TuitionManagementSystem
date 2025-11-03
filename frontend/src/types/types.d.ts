@@ -27,3 +27,12 @@ interface Student {
     password: string;
     createdAt?: Date;
 }
+
+interface Semester {
+    _id: string;
+    student_id: string;
+    term: "1st" | "2nd" | "Summer";
+    schoolYear: string;
+    enrollmentStatus: "Regular" | "Irregular";
+    course: Course;
+}

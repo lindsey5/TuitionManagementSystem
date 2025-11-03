@@ -4,6 +4,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import Students from "./pages/admin/Students/Students";
 import Courses from "./pages/admin/Courses/Courses";
 import Subjects from "./pages/admin/Subjects/Subjects";
+import StudentSubjects from "./pages/admin/Students/StudentSubjects";
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="courses" element={<Courses />} />
           <Route path="students" element={<Students />} />
           <Route path="subjects" element={<Subjects />} />
+          <Route path="student-subjects/:id" element={<StudentSubjects />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Types } from 'mongoose';
 import { hashPassword } from '../utils/auth';
+import Semester from './Semester';
 
 export interface IStudent extends Document {
     student_id: string;
@@ -70,6 +71,14 @@ StudentSchema.pre<IStudent>('save', async function (next) {
         return next();
     }
     this.password = await hashPassword(this.password);
+    next();
+});
+
+StudentSchema.pre('findOneAndDelete', async function (next) {
+    const student = await this.model.findOne(this.getFilter());
+    if (student) {
+        await Semester.deleteMany({ student_id: student._id });
+    }
     next();
 });
 

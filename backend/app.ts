@@ -7,6 +7,8 @@ import authRoutes from './routes/auth.route';
 import courseRoutes from './routes/course.route';
 import subjectRoutes from './routes/subject.route';
 import studentRoutes from './routes/student.route';
+import semesterRoutes from './routes/semester.route';
+import enrolledSubjectRoutes from './routes/enrolledSubject.route';
 
 const app = express();
 
@@ -28,5 +30,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/subjects', subjectRoutes);
 app.use('/api/students', studentRoutes);
+app.use('/api/semesters', semesterRoutes);
+app.use('/api/enrolled-subjects', enrolledSubjectRoutes);
 
 export default app

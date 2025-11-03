@@ -4,14 +4,19 @@ import { Title } from "../../../components/Text";
 import SubjectModal from "./ui/SubjectModal";
 import useFetch from "../../../hooks/useFetch";
 import PurpleTable from "../../../components/Table";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 import { deleteData } from "../../../utils/api";
 import { confirmDialog, errorAlert, successAlert } from "../../../utils/swal";
+import { useDebounce } from "../../../hooks/useDebounce";
+import { SearchField } from "../../../components/Textfield";
 
 const Subjects = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedSubject, setSelectedSubject] = useState<Subject>();
-    const { data, loading } = useFetch('/api/subjects'); // ✅ Updated endpoint
+    const [searchTerm, setSearchTerm] = useState('');
+    const searchDebounce = useDebounce(searchTerm, 500);
+    const [page, setPage] = useState(1);
+    const { data, loading } = useFetch(`/api/subjects?searchTerm=${searchDebounce}&page=${page}&limit=${30}`);
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -34,12 +39,24 @@ const Subjects = () => {
         window.location.reload();
         }
     };
+    
+    const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
 
     return (
         <div className="p-5 w-full">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-6">
             <Title label="Subjects" />
             <AddButton onClick={() => setShowModal(true)} label="Add Subject" />
+        </div>
+
+        <div className="mb-6 md:w-1/2">
+            <SearchField 
+                onChange={(e) => setSearchTerm(e.target.value)}
+                value={searchTerm}
+                placeholder="Search by name or code"
+            />
         </div>
 
         {/* Modal */}
@@ -51,7 +68,7 @@ const Subjects = () => {
             </div>
         ) : data?.subjects.length === 0 ? (
             <p className="text-center text-gray-500 mt-20">
-            No subjects available. Click "Add Subject" to create one.
+            No subjects found.
             </p>
         ) : (
             <PurpleTable
@@ -70,8 +87,19 @@ const Subjects = () => {
             })) || []}
             />
         )}
+
+        {data?.subjects.length > 0 && (
+            <Pagination
+                sx={{ marginTop: '20px' }}
+                page={page}
+                count={data?.totalPages || 1}
+                onChange={handleChange}
+                color="primary"
+            />
+        )}
         </div>
     );
 };
 
 export default Subjects;
+

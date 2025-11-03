@@ -8,7 +8,7 @@ interface ButtonProps {
 export const AddButton = ({ onClick, label = "Add" }: ButtonProps) => {
     return (
         <button
-            className="mb-4 flex items-center gap-2 py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-500 transition cursor-pointer"
+            className="flex items-center gap-2 py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-500 transition cursor-pointer"
             onClick={onClick}
         >
             <Plus size={18} />

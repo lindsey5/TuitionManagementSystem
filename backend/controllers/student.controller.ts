@@ -2,6 +2,7 @@ import Student from "../models/Student";
 import { Request, Response } from "express";
 import generatePassword from "../utils/password";
 import { sendStudentEmail } from "../services/emailService";
+import { getStudentById } from "../services/studentService";
 
 export const createStudent = async (req : Request, res : Response) => {
     try{
@@ -41,6 +42,7 @@ export const getAllStudents = async (req : Request, res : Response) => {
         if(searchTerm){ 
             query.$or = [
                 { firstname: { $regex: searchTerm, $options: 'i' } },
+                { middlename: { $regex: searchTerm, $options: 'i' } },
                 { lastname: { $regex: searchTerm, $options: 'i' } },
                 { student_id: { $regex: searchTerm, $options: 'i' } },
                 { email: { $regex: searchTerm, $options: 'i' } },
@@ -105,5 +107,21 @@ export const deleteStudent = async (req : Request, res : Response) => {
 
     }catch(error : any){
         res.status(500).json({ message: error.message || "Server Error" });   
+    }
+}
+
+export const getStudentThroughParams = async (req : Request, res : Response) => {
+    try{
+        const student = await getStudentById(req.params.id);
+
+        if(!student){
+            res.status(404).json({ message: 'Student not found.'})
+            return;
+        }
+
+        res.status(200).json({ success: true, student});
+
+    }catch(err : any){
+        res.status(500).json({ message: err.message || 'Server Error'})
     }
 }

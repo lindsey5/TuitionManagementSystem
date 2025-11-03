@@ -7,11 +7,15 @@ import PurpleTable from "../../../components/Table";
 import { CircularProgress } from "@mui/material";
 import { deleteData } from "../../../utils/api";
 import { confirmDialog, errorAlert, successAlert } from "../../../utils/swal";
+import { useDebounce } from "../../../hooks/useDebounce";
+import { SearchField } from "../../../components/Textfield";
 
 const Courses = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState<Course>();
-    const { data, loading } = useFetch('/api/courses');
+    const [searchTerm, setSearchTerm] = useState('');
+    const searchDebounce = useDebounce(searchTerm, 500);
+    const { data, loading } = useFetch(`/api/courses?searchTerm=${searchDebounce}`);
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -37,9 +41,17 @@ const Courses = () => {
 
     return (
         <div className="p-5 w-full">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-6">
                 <Title label="Courses" />
                 <AddButton onClick={() => setShowModal(true)} label="Add Course" />
+            </div>
+
+            <div className="mb-6 md:w-1/2">
+                <SearchField 
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={searchTerm}
+                    placeholder="Search by course name or course code"
+                />
             </div>
 
             <CourseModal isOpen={showModal} course={selectedCourse} onClose={handleCloseModal}/>
@@ -50,7 +62,7 @@ const Courses = () => {
             </div>) 
             : 
             data?.courses.length === 0 ? (
-                <p className="text-center text-gray-500 mt-20">No courses available. Click "Add Course" to create one.</p>
+                <p className="text-center text-gray-500 mt-20">No courses found.</p>
             ) :
             <PurpleTable 
                 columns={['#', 'Course Name', 'Course Code', 'Actions']}
