@@ -18,7 +18,7 @@ const StudentSubjects = () => {
     const [showAddSubject, setShowAddSubject] = useState(false);
     const { data : studentRes, loading : studentLoading } = useFetch(`/api/students/${id}`);
     const { data : semesterRes, loading : semesterLoading } = useFetch(`/api/semesters/${id}`);
-    const { data : enrolledSubjectsRes, loading : enrolledSubjectsLoading } = useFetch(`/api/enrolled-subjects?student_id=${id}&semester=${selectedSemester}`)
+    const { data : enrolledSubjectsRes } = useFetch(`/api/enrolled-subjects?student_id=${id}&semester=${selectedSemester}`)
     const [showSemesterModal, setShowSemesterModal] = useState(false);
 
     console.log(enrolledSubjectsRes)
