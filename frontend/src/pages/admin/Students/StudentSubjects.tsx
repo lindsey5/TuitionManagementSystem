@@ -106,7 +106,7 @@ const StudentSubjects = () => {
                 </div>
             )}
             
-            {enrolledSubjectsLoading && enrolledSubjectsRes?.enrolledSubjects.length > 0 && (
+            {!enrolledSubjectsLoading && enrolledSubjectsRes?.enrolledSubjects.length > 0 && (
                 <PurpleTable 
                     columns={['Subject', 'Code', 'Units', 'Semester', 'Amount']}
                     data={enrolledSubjectsRes?.enrolledSubjects.map((enrolledSubject : EnrolledSubject) => ({

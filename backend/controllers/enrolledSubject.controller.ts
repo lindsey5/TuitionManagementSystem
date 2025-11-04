@@ -3,6 +3,13 @@ import EnrolledSubject from "../models/EnrolledSubject";
 
 export const createEnrolledSubject = async (req : Request, res : Response) => {
     try{
+        const isExist = await EnrolledSubject.findOne(req.body);
+
+        if(isExist){
+            res.status(409).json({ message: 'Subject already exists'})
+            return;
+        }
+
         const enrolledSubject = await EnrolledSubject.create(req.body);
 
         res.status(201).json({ success: true, enrolledSubject });
