@@ -18,7 +18,7 @@ const StudentSubjects = () => {
     const [showAddSubject, setShowAddSubject] = useState(false);
     const { data : studentRes, loading : studentLoading } = useFetch(`/api/students/${id}`);
     const { data : semesterRes, loading : semesterLoading } = useFetch(`/api/semesters/${id}`);
-    const { data : enrolledSubjectsRes } = useFetch(`/api/enrolled-subjects?student_id=${id}&semester=${selectedSemester}`)
+    const { data : enrolledSubjectsRes, loading : enrolledSubjectsLoading } = useFetch(`/api/enrolled-subjects?student_id=${id}&semester=${selectedSemester}`)
     const [showSemesterModal, setShowSemesterModal] = useState(false);
 
     console.log(enrolledSubjectsRes)
@@ -72,9 +72,13 @@ const StudentSubjects = () => {
                 {studentLoading ? <CircularProgress /> : 
                     <div className="mt-2 space-y-2">
                         <h1>Student ID: {studentRes?.student.student_id}</h1>
-                        <h1>Student Name: {studentRes?.student.firstname} {studentRes?.student.middlename} {studentRes?.student.lastname} ({semester?.enrollmentStatus})</h1>
-                        <h1>Semester: {semester?.term} Term ({semester?.schoolYear})</h1>
-                        <h1>Price Per Unit: {formatNumberToPeso(semester?.pricePerUnit || 0)}</h1>
+                        <h1>Student Name: {studentRes?.student.firstname} {studentRes?.student.middlename} {studentRes?.student.lastname} {selectedSemester && `(${semester?.enrollmentStatus})`}</h1>
+                        {selectedSemester && (
+                            <>
+                            <h1>Semester: {semester?.term} Term ({semester?.schoolYear})</h1>
+                            <h1>Price Per Unit: {formatNumberToPeso(semester?.pricePerUnit || 0)}</h1>
+                            </>
+                        )}
                     </div>
                 }
                 <div className="w-[400px]">
@@ -92,20 +96,28 @@ const StudentSubjects = () => {
                 <p className="text-center text-gray-500 mt-20">No semesters yet. Please add new one</p>
             )}
 
-            {selectedSemester && enrolledSubjectsRes?.enrolledSubjects.length < 1 ? (
+            {selectedSemester && enrolledSubjectsRes?.enrolledSubjects.length < 1 && (
                 <p className="text-center text-gray-500 mt-20">No enrolled subjects found. Please add new one</p>
-            ) : 
-            <PurpleTable 
-                columns={['Subject', 'Code', 'Units', 'Semester', 'Amount']}
-                data={enrolledSubjectsRes?.enrolledSubjects.map((enrolledSubject : EnrolledSubject) => ({
-                    "Subject": enrolledSubject.subject.name,
-                    "Code": enrolledSubject.subject.code,
-                    "Units": enrolledSubject.subject.units,
-                    "Semester": `${enrolledSubject.semester.term} Term - ${enrolledSubject.semester.schoolYear}`,
-                    "Amount": formatNumberToPeso(enrolledSubject.semester.pricePerUnit * enrolledSubject.subject.units)
-                })) || []}
-            />
-            }
+            )}
+
+            {enrolledSubjectsLoading && (
+                <div className="flex justify-center">
+                    <CircularProgress />
+                </div>
+            )}
+            
+            {enrolledSubjectsLoading && enrolledSubjectsRes?.enrolledSubjects.length > 0 && (
+                <PurpleTable 
+                    columns={['Subject', 'Code', 'Units', 'Semester', 'Amount']}
+                    data={enrolledSubjectsRes?.enrolledSubjects.map((enrolledSubject : EnrolledSubject) => ({
+                        "Subject": enrolledSubject.subject.name,
+                        "Code": enrolledSubject.subject.code,
+                        "Units": enrolledSubject.subject.units,
+                        "Semester": `${enrolledSubject.semester.term} Term - ${enrolledSubject.semester.schoolYear}`,
+                        "Amount": formatNumberToPeso(enrolledSubject.semester.pricePerUnit * enrolledSubject.subject.units)
+                    })) || []}
+                />
+            )}
 
            {selectedSemester && enrolledSubjectsRes?.enrolledSubjects.length > 0 && (
                 <div className="flex justify-end mt-6">
