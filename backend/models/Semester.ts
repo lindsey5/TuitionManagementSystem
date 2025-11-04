@@ -7,6 +7,7 @@ export interface ISemester extends Document {
   schoolYear: string;
   enrollmentStatus: "Regular" | "Irregular";
   course: Types.ObjectId;
+  pricePerUnit: number;
 }
 
 const SemesterSchema: Schema<ISemester> = new Schema(
@@ -36,6 +37,10 @@ const SemesterSchema: Schema<ISemester> = new Schema(
       ref: "Course", // must match your Course model registration
       required: true,
     },
+    pricePerUnit: {
+      type: Number,
+      required: true,
+    }
   },
   { timestamps: true }
 );

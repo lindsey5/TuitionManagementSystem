@@ -17,6 +17,7 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
     const [term, setTerm] = useState<"1st" | "2nd" | "Summer">("1st");
     const [schoolYear, setSchoolYear] = useState<string>("");
     const [enrollmentStatus, setEnrollmentStatus] = useState<"Regular" | "Irregular">("Regular");
+    const [pricePerUnit, setPricePerUnit] = useState<number>();
     const [loading, setLoading] = useState(false);
 
     const handleSaveSemester = async () => {
@@ -42,6 +43,7 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
             schoolYear,
             enrollmentStatus,
             course: student.course._id,
+            pricePerUnit,
         };
 
         const response = await postData("/api/semesters", payload);
@@ -88,13 +90,21 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
 
             {/* Enrollment Status */}
             <PurpleSelect
-            label="Enrollment Status"
-            value={enrollmentStatus}
-            onChange={(e) => setEnrollmentStatus(e.target.value as "Regular" | "Irregular")}
+                label="Enrollment Status"
+                value={enrollmentStatus}
+                onChange={(e) => setEnrollmentStatus(e.target.value as "Regular" | "Irregular")}
             >
-            <MenuItem value="Regular">Regular</MenuItem>
-            <MenuItem value="Irregular">Irregular</MenuItem>
+                <MenuItem value="Regular">Regular</MenuItem>
+                <MenuItem value="Irregular">Irregular</MenuItem>
             </PurpleSelect>
+
+            <PurpleTextField
+                label="Price (Per Unit)"
+                type="number"
+                value={pricePerUnit}
+                onChange={(e) => setPricePerUnit(Number(e.target.value))}
+                fullWidth
+            />
 
             {/* Actions */}
             <div className="flex justify-end gap-2 mt-4">

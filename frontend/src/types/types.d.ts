@@ -35,4 +35,17 @@ interface Semester {
     schoolYear: string;
     enrollmentStatus: "Regular" | "Irregular";
     course: Course;
+    pricePerUnit: number;
+}
+
+interface EnrolledSubject {
+    _id: string;
+    student_id: string;
+    subject: Subject;
+    semester: Semester;
+}
+
+interface Option {
+  label: string;
+  value: any;
 }

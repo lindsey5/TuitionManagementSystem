@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { createEnrolledSubject } from "../controllers/enrolledSubject.controller";
+import { createEnrolledSubject, getEnrolledSubjects } from "../controllers/enrolledSubject.controller";
 const router = Router();
 
 router.post('/', createEnrolledSubject);
+router.get('/', getEnrolledSubjects);
 
 const enrolledSubjectRoutes = router;
 

@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import Course from "../models/Course";
 import { Request, Response } from "express";
 
