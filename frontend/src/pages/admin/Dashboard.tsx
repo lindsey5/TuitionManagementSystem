@@ -1,8 +1,6 @@
 import { Title } from "../../components/Text";
 import DashboardCards from "../../components/ui/DashboardCards";
-import LineChart from "../../components/ui/LineChart";
 import MonthlyIncomes from "../../components/ui/MonthlyIncomes";
-import useFetch from "../../hooks/useFetch"
 
 const Dashboard = () => {
 

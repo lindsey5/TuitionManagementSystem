@@ -31,11 +31,11 @@ const SemesterSchema: Schema<ISemester> = new Schema(
     schoolYear: {
       type: String,
       required: true,
-      match: /^\d{4}-\d{4}$/, // e.g. 2025-2026
+      match: /^\d{4}-\d{4}$/, 
     },
     course: {
       type: Schema.Types.ObjectId,
-      ref: "Course", // must match your Course model registration
+      ref: "Course", 
       required: true,
     },
     pricePerUnit: {
