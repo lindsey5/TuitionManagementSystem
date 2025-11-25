@@ -10,21 +10,21 @@ import { useUser } from "../../contexts/UserContext";
 const StudentEnrolledSubjects = () => {
     const { user, loading : studentLoading } = useUser<Student>();
     const [selectedSemester, setSelectedSemester] = useState<string>("");
-    const { data : semestersRes, loading : semesterLoading } = useFetch(user?._id ? `/api/semesters` : '');
+    const { data : semestersRes, loading : semestersLoading } = useFetch(user?._id ? `/api/semesters` : '');
     const { data : enrolledSubjectsRes, loading : enrolledSubjectsLoading } = useFetch(user?._id ? `/api/enrolled-subjects/me?semester=${selectedSemester}` : '')
 
     useEffect(() => {
-        if(semestersRes?.semesters.length > 0 && !semesterLoading) setSelectedSemester(semestersRes.semesters[0]._id)
+        if(semestersRes?.semesters.length > 0 && !semestersLoading) setSelectedSemester(semestersRes.semesters[0]._id)
     }, [semestersRes])
 
     const semester = useMemo<Semester | undefined>(() => {
-        if(!semestersRes?.semesters || semesterLoading) return undefined
+        if(!semestersRes?.semesters || semestersLoading) return undefined
         
         return semestersRes.semesters.find((semester : Semester) => semester._id === selectedSemester)
         
     }, [selectedSemester])
 
-    const { data : semesterData  } = useFetch(semester ?  `/api/semesters/data/${semester._id}` : '')
+    const { data : semesterData, loading : semesterLoading } = useFetch(semester ?  `/api/semesters/data/${semester._id}` : '')
 
     const totalTuition = useMemo(() => {
         if(!enrolledSubjectsRes?.enrolledSubjects) return 0
@@ -95,13 +95,17 @@ const StudentEnrolledSubjects = () => {
                     })) || []}
                 />
             )}
-                {semesterData?.semester && <div className="hidden md:flex justify-end">
-                    <div className="space-y-2">
-                        <h1>Total Tuition: {formatNumberToPeso(totalTuition || 0)}</h1>
-                        <h1>Paid Amount: {formatNumberToPeso(semesterData?.totalPaid || 0)}</h1>
-                        <h1 className="font-semibold text-lg">Remaining Balance: {formatNumberToPeso(semesterData?.balance || 0)}</h1>
-                    </div>
-                </div>}
+                <div className="hidden md:flex justify-end">
+                    {semesterLoading ?  <CircularProgress /> : (
+                        <div className="space-y-2">
+                            {semesterData?.semester && <>
+                            <h1>Total Tuition: {formatNumberToPeso(totalTuition || 0)}</h1>
+                            <h1>Paid Amount: {formatNumberToPeso(semesterData?.totalPaid || 0)}</h1>
+                            <h1 className="font-semibold text-lg">Remaining Balance: {formatNumberToPeso(semesterData?.balance || 0)}</h1>
+                            </>}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )
