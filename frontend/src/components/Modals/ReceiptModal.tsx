@@ -45,10 +45,10 @@ const ReceiptModal = ({ open, onClose, payment_id } : ReceiptModalProps) => {
 
                 {/* Receipt Info */}
                 <div className="mb-4 text-center">
-                    <p className="font-bold text-base mb-1">TUITION PAYMENT RECEIPT</p>
-                    <p className="text-xs">Semester: {data?.payment.semester.term} ({data?.payment.semester.schoolYear})</p>
-                     <p className="text-xs">Price per unit: {data?.payment.semester.pricePerUnit}</p>
-                    <p className="text-xs">{formatDateTime(data?.payment.createdAt)}</p>
+                    <p className="font-bold text-lg mb-1">TUITION PAYMENT RECEIPT</p>
+                    <p className="text-sm">Semester: {data?.payment.semester.term} ({data?.payment.semester.schoolYear})</p>
+                     <p className="text-sm">Price per unit: {formatNumberToPeso(data?.payment.semester.pricePerUnit)}</p>
+                    <p className="text-sm">{formatDateTime(data?.payment.createdAt)}</p>
                 </div>
 
                 {/* Items */}
