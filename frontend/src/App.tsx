@@ -8,6 +8,9 @@ import StudentSubjects from "./pages/admin/StudentSubjects";
 import Payments from "./pages/admin/Payments";
 import Dashboard from "./pages/admin/Dashboard";
 import { UserContextProvider } from "./contexts/UserContext";
+import StudentLayout from "./layouts/StudentLayout";
+import StudentEnrolledSubjects from "./pages/student/StudentEnrolledSubject";
+import StudentPayments from "./pages/student/StudentPayments";
 
 function App() {
 
@@ -23,6 +26,11 @@ function App() {
             <Route path="subjects" element={<Subjects />} />
             <Route path="student-subjects/:id" element={<StudentSubjects />} />
             <Route path="payments" element={<Payments />} />
+          </Route>
+
+          <Route path="student" element={<StudentLayout />}>
+            <Route index element={<StudentEnrolledSubjects />}/>
+            <Route path="payments" element={<StudentPayments />} />
           </Route>
         </Routes>
       </BrowserRouter>

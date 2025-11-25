@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import EnrolledSubject from "../models/EnrolledSubject";
+import { AuthenticatedRequest } from "../types/types";
 
 export const createEnrolledSubject = async (req : Request, res : Response) => {
     try{
@@ -28,6 +29,20 @@ export const getEnrolledSubjects = async (req : Request, res : Response) => {
         res.status(200).json({ success: true, enrolledSubjects });
 
     }catch(err : any){
+        res.status(500).json({ message: err.message || 'Server Error'});
+    }
+}
+
+export const getMyEnrolledSubjects = async (req : AuthenticatedRequest, res : Response) => {
+    try{
+        const enrolledSubjects = await EnrolledSubject
+            .find({ student_id: req.user_id, semester: req.query.semester })
+            .populate(['semester', 'subject']);
+
+        res.status(200).json({ success: true, enrolledSubjects });
+
+    }catch(err : any){
+        console.log(err)
         res.status(500).json({ message: err.message || 'Server Error'});
     }
 }

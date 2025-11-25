@@ -13,6 +13,8 @@ import {
     type LucideIcon,
 } from 'lucide-react';
 import { postData } from '../../utils/api';
+import { useUser } from '../../contexts/UserContext';
+import { Navigate } from 'react-router-dom';
 
 type UserType = {
     id: 'admin' | 'registrar' | 'student';
@@ -28,6 +30,13 @@ export default function LoginPage() {
     const [password, setPassword] = useState<string>('');
     const [userType, setUserType] = useState<UserType['id'] | null>(null);
     const [step, setStep] = useState<number>(1);
+    const { user, loading } = useUser<any>();
+
+    if(loading) return;
+
+    if(user?.role){
+        return <Navigate to={`/${user.role}`}/>
+    }
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();

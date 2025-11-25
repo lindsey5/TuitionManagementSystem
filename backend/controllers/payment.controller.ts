@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getRemainingBalance } from "../services/studentService";
 import Payment from "../models/Payment";
 import EnrolledSubject from "../models/EnrolledSubject";
+import mongoose from "mongoose";
 
 export const createPayment = async (req: Request, res: Response) => {
     try {
@@ -54,6 +55,33 @@ export const getPayments = async (req : Request, res : Response) => {
             query.$or = [
                 { 'student_id.student_id': { $regex: searchTerm, $options: 'i' } },
             ];
+        }
+
+        const payments = await Payment.find(query)
+            .populate(['semester', 'student_id'])
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limitNumber);
+        const total = await Payment.countDocuments(query);
+
+        res.status(200).json({ success: true, payments, total, page: pageNumber, totalPages: Math.ceil(total / limitNumber) });
+       
+    }catch(error : any){
+        res.status(500).json({ message: error.message || "Server Error" });   
+    }
+}
+
+export const getMyPayments = async (req : Request, res : Response) => {
+
+    try{
+        const { page, limit, semester } = req.query;
+        const pageNumber = parseInt(page as string) || 1;
+        const limitNumber = parseInt(limit as string) || 10;
+        const skip = (pageNumber - 1) * limitNumber;
+
+        let query : any = {};
+        if(semester && semester !== 'All'){ 
+            query.semester = new mongoose.Types.ObjectId(semester as string)
         }
 
         const payments = await Payment.find(query)

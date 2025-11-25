@@ -1,39 +1,37 @@
 import { useState } from "react";
-import { AddButton } from "../../components/Button";
 import { Title } from "../../components/Text";
 import useFetch from "../../hooks/useFetch";
 import PurpleTable from "../../components/Table";
-import { CircularProgress } from "@mui/material";
-import { useDebounce } from "../../hooks/useDebounce";
-import { SearchField } from "../../components/Textfield";
+import { CircularProgress, MenuItem } from "@mui/material";
 import PaymentModal from "../../components/Modals/PaymentModal";
 import { formatNumberToPeso } from "../../utils/utils";
 import { formatDateTime } from "../../utils/date";
 import ReceiptModal from "../../components/Modals/ReceiptModal";
 import { Eye } from "lucide-react";
+import { PurpleSelect } from "../../components/Select";
 
-const Payments = () => {
+const StudentPayments = () => {
     const [showModal, setShowModal] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
-    const searchDebounce = useDebounce(searchTerm, 500);
+    const [semester, setSemester] = useState<string>();
     const [selectedPayment, setSelectedPayment] = useState<string>();
-    const { data, loading } = useFetch(`/api/payments?searchTerm=${searchDebounce}`);
+    const { data : semestersRes } = useFetch('/api/semesters');
+    const { data, loading } = useFetch(`/api/payments/me?semester=${semester || ''}`);
+
 
     return (
         <div className="p-5 w-full md:h-full flex flex-col">
             <PaymentModal isOpen={showModal} onClose={() => setShowModal(false)}/>
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex md:items-center md:flex-row flex-col md:justify-between mb-6">
                 <Title label="Payment History" />
-                <AddButton onClick={() => setShowModal(true)} label="Create Payment" />
-            </div>
-
-            <div className="flex md:flex-row flex-col md:items-center md:justify-between gap-4">
-                <div className="mb-6 md:w-1/2">
-                    <SearchField 
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        value={searchTerm}
-                        placeholder="Search by student id"
-                    />
+                <div className="w-full md:w-[400px]">
+                    <PurpleSelect
+                        label="Semester"
+                        value={semester}
+                        onChange={(e) => setSemester(e.target.value)}
+                        >
+                        <MenuItem value="">All</MenuItem>
+                        {semestersRes?.semesters.map((semester : Semester) => <MenuItem value={semester._id}>{semester.term} - {semester.schoolYear}</MenuItem>)}
+                    </PurpleSelect>
                 </div>
             </div>
 
@@ -74,4 +72,4 @@ const Payments = () => {
     )
 }
 
-export default Payments;
+export default StudentPayments;
