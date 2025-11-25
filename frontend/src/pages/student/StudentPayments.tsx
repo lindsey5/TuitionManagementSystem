@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Title } from "../../components/Text";
 import useFetch from "../../hooks/useFetch";
 import PurpleTable from "../../components/Table";
-import { CircularProgress, MenuItem } from "@mui/material";
+import { CircularProgress, MenuItem, Pagination } from "@mui/material";
 import PaymentModal from "../../components/Modals/PaymentModal";
 import { formatNumberToPeso } from "../../utils/utils";
 import { formatDateTime } from "../../utils/date";
@@ -15,9 +15,12 @@ const StudentPayments = () => {
     const [semester, setSemester] = useState<string>('All');
     const [selectedPayment, setSelectedPayment] = useState<string>();
     const { data : semestersRes } = useFetch('/api/semesters');
-    const { data, loading } = useFetch(`/api/payments/me?semester=${semester || ''}`);
+    const [page, setPage] = useState(1);
+    const { data, loading } = useFetch(`/api/payments/me?page=${page}&limit=50&semester=${semester || ''}`);
 
-
+    const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
     return (
         <div className="p-5 w-full md:h-full flex flex-col">
             <PaymentModal isOpen={showModal} onClose={() => setShowModal(false)}/>
@@ -27,7 +30,10 @@ const StudentPayments = () => {
                     <PurpleSelect
                         label="Semester"
                         value={semester}
-                        onChange={(e) => setSemester(e.target.value)}
+                        onChange={(e) => {
+                            setSemester(e.target.value)
+                            setPage(1)
+                        }}
                         >
                         <MenuItem value="All">All</MenuItem>
                         {semestersRes?.semesters.map((semester : Semester) => <MenuItem value={semester._id}>{semester.term} - {semester.schoolYear}</MenuItem>)}
@@ -68,6 +74,15 @@ const StudentPayments = () => {
                 onClose={() => setSelectedPayment(undefined)}
                 payment_id={selectedPayment || ''}
             />
+            {data?.students.length > 0 && (
+                <Pagination
+                    sx={{ marginTop: '20px' }}
+                    page={page}
+                    count={data?.totalPages || 1}
+                    onChange={handleChange}
+                    color="secondary"
+                />
+            )}
         </div>
     )
 }

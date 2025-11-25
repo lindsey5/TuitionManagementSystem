@@ -3,7 +3,7 @@ import { AddButton } from "../../components/Button";
 import { Title } from "../../components/Text";
 import useFetch from "../../hooks/useFetch";
 import PurpleTable from "../../components/Table";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 import { useDebounce } from "../../hooks/useDebounce";
 import { SearchField } from "../../components/Textfield";
 import PaymentModal from "../../components/Modals/PaymentModal";
@@ -17,8 +17,12 @@ const Payments = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const searchDebounce = useDebounce(searchTerm, 500);
     const [selectedPayment, setSelectedPayment] = useState<string>();
-    const { data, loading } = useFetch(`/api/payments?searchTerm=${searchDebounce}`);
+    const [page, setPage] = useState(1);
+    const { data, loading } = useFetch(`/api/payments?page=${page}&limit=50&searchTerm=${searchDebounce}`);
 
+    const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
+        setPage(value);
+    };
     return (
         <div className="p-5 w-full md:h-full flex flex-col">
             <PaymentModal isOpen={showModal} onClose={() => setShowModal(false)}/>
@@ -30,7 +34,10 @@ const Payments = () => {
             <div className="flex md:flex-row flex-col md:items-center md:justify-between gap-4">
                 <div className="mb-6 md:w-1/2">
                     <SearchField 
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value)
+                            setPage(1)
+                        }}
                         value={searchTerm}
                         placeholder="Search by student id"
                     />
@@ -70,6 +77,15 @@ const Payments = () => {
                 onClose={() => setSelectedPayment(undefined)}
                 payment_id={selectedPayment || ''}
             />
+            {data?.payments.length > 0 && (
+                <Pagination
+                    sx={{ marginTop: '20px' }}
+                    page={page}
+                    count={data?.totalPages || 1}
+                    onChange={handleChange}
+                    color="secondary"
+                />
+            )}
         </div>
     )
 }

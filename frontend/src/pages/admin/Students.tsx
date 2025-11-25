@@ -56,7 +56,10 @@ const Students = () => {
 
         <div className="mb-6 md:w-1/2">
             <SearchField 
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                    setSearchTerm(e.target.value)
+                    setPage(1)
+                }}
                 value={searchTerm}
                 placeholder="Search by firstname, middlename, lastname, student id or email"
             />
