@@ -12,7 +12,7 @@ import { PurpleSelect } from "../../components/Select";
 
 const StudentPayments = () => {
     const [showModal, setShowModal] = useState(false);
-    const [semester, setSemester] = useState<string>();
+    const [semester, setSemester] = useState<string>('All');
     const [selectedPayment, setSelectedPayment] = useState<string>();
     const { data : semestersRes } = useFetch('/api/semesters');
     const { data, loading } = useFetch(`/api/payments/me?semester=${semester || ''}`);
@@ -29,7 +29,7 @@ const StudentPayments = () => {
                         value={semester}
                         onChange={(e) => setSemester(e.target.value)}
                         >
-                        <MenuItem value="">All</MenuItem>
+                        <MenuItem value="All">All</MenuItem>
                         {semestersRes?.semesters.map((semester : Semester) => <MenuItem value={semester._id}>{semester.term} - {semester.schoolYear}</MenuItem>)}
                     </PurpleSelect>
                 </div>
