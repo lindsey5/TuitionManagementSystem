@@ -1,11 +1,11 @@
 import { Modal, MenuItem } from "@mui/material";
 import { useState, useEffect } from "react";
 import { Check } from "lucide-react";
-import { PurpleTextField } from "../../../../components/Textfield";
-import { postData, updateData } from "../../../../utils/api";
-import LoadingScreen from "../../../../components/Loading";
-import { confirmDialog, errorAlert, successAlert } from "../../../../utils/swal";
-import useFetch from "../../../../hooks/useFetch";
+import { PurpleTextField } from "../Textfield";
+import { postData, updateData } from "../../utils/api";
+import LoadingScreen from "../Loading";
+import { confirmDialog, errorAlert, successAlert } from "../../utils/swal";
+import useFetch from "../../hooks/useFetch";
 
 interface StudentModalProps {
   isOpen: boolean;

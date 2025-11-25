@@ -1,5 +1,6 @@
 import Course from "../models/Course";
 import { Request, Response } from "express";
+import Student from "../models/Student";
 
 export const createCourse = async (req: Request, res : Response) => {
     try{
@@ -36,12 +37,11 @@ export const createCourse = async (req: Request, res : Response) => {
             course.name = name;
             course.code = code;
             course.status = 'active';
-            course.createdAt = new Date();
             course = await course.save();
         }else{
             course = await Course.create({ name, code }); 
         }
-        console.log(course)
+
         res.status(201).json({ success: true , course});
 
     }catch(error : any){

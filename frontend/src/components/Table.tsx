@@ -1,14 +1,13 @@
 type PurpleTableProps = {
     columns: string[];
     data: any[];
-    classname?: string; 
+    className?: string; 
 };
 
-const PurpleTable = ({ columns, data, classname = 'className="hidden md:block max-h-screen overflow-y-auto"' }: PurpleTableProps) => {
+const PurpleTable = ({ columns, data, className = 'hidden md:block h-full overflow-y-auto' }: PurpleTableProps) => {
     return (
-        <div className="w-full bg-white shadow-sm rounded-lg border border-gray-200">
-        {/* ✅ Desktop / Tablet View */}
-        <div className={classname}>
+        <div className="min-h-0 flex-grow w-full bg-white shadow-sm rounded-lg border border-gray-200">
+        <div className={className}>
             <table className="min-w-full border-collapse">
             <thead className="bg-purple-600 text-white text-left text-sm font-medium sticky top-0">
                 <tr>
@@ -23,7 +22,7 @@ const PurpleTable = ({ columns, data, classname = 'className="hidden md:block ma
                 {data.map((row, index) => (
                 <tr
                     key={index}
-                    className="hover:bg-gray-50 transition border-b border-gray-200"
+                    className={`hover:bg-purple-200 transition ${index % 2 === 0 && 'bg-purple-50'}`}
                 >
                     {columns.map((column) => (
                     <td key={column} className="py-3 px-4 text-sm">
@@ -37,19 +36,42 @@ const PurpleTable = ({ columns, data, classname = 'className="hidden md:block ma
         </div>
 
         {/* ✅ Mobile View */}
-        <div className="block md:hidden divide-y divide-gray-200">
+        <div className="block md:hidden h-full overflow-y-auto flex flex-col gap-4 p-4">
             {data.map((row, index) => (
-            <div
-                key={index}
-                className="p-4 hover:bg-gray-50 transition flex flex-col gap-2"
-            >
-                {columns.map((column) => (
-                <div key={column} className="flex justify-between text-sm">
-                    <span className="font-medium text-gray-600">{column}:</span>
-                    <span className="text-gray-800">{row[column]}</span>
+                <div
+                    key={index}
+                    className="w-full bg-white rounded-2xl shadow-md p-6 shadow-xl transition-all duration-300 border-l-4 border-purple-500"
+                >
+                    {/* Content */}
+                    <div className="flex flex-col gap-3">
+                        {columns.map((column, idx) => (
+                            <div 
+                                key={column} 
+                                className={`${idx === 0 ? 'pb-3 mb-2 border-b-2 border-gray-100' : ''}`}
+                            >
+                                <div className={`${idx === 0 ? 'mb-1' : 'flex items-center gap-2'}`}>
+                                    <span className={`${
+                                        idx === 0 
+                                            ? 'text-xs font-semibold text-purple-600 uppercase tracking-wider' 
+                                            : 'text-xs text-gray-500 flex-shrink-0 w-28'
+                                    }`}>
+                                        {column}
+                                    </span>
+                                    {idx !== 0 && (
+                                        <span className="text-sm font-semibold text-gray-800 flex-1 text-right">
+                                            {row[column]}
+                                        </span>
+                                    )}
+                                </div>
+                                {idx === 0 && (
+                                    <p className="text-lg font-bold text-gray-900">
+                                        {row[column]}
+                                    </p>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                ))}
-            </div>
             ))}
         </div>
         </div>

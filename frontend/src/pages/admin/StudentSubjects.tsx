@@ -1,16 +1,16 @@
 import { Navigate, useParams } from "react-router-dom";
-import { Title } from "../../../components/Text";
-import { AddButton } from "../../../components/Button";
+import { Title } from "../../components/Text";
+import { AddButton } from "../../components/Button";
 import { useEffect, useMemo, useState } from "react";
-import SemesterModal from "./ui/SemesterModal";
-import useFetch from "../../../hooks/useFetch";
-import { PurpleSelect } from "../../../components/Select";
+import SemesterModal from "../../components/Modals/SemesterModal";
+import useFetch from "../../hooks/useFetch";
+import { PurpleSelect } from "../../components/Select";
 import { Button, CircularProgress, MenuItem } from "@mui/material";
-import { confirmDialog, errorAlert } from "../../../utils/swal";
-import { deleteData } from "../../../utils/api";
-import AddEnrolledSubject from "./ui/AddEnrolledSubject";
-import PurpleTable from "../../../components/Table";
-import { formatNumberToPeso } from "../../../utils/utils";
+import { confirmDialog, errorAlert } from "../../utils/swal";
+import { deleteData } from "../../utils/api";
+import AddEnrolledSubject from "../../components/Modals/AddEnrolledSubject";
+import PurpleTable from "../../components/Table";
+import { formatNumberToPeso } from "../../utils/utils";
 
 const StudentSubjects = () => {
     const { id } = useParams();
@@ -59,7 +59,7 @@ const StudentSubjects = () => {
     }, [enrolledSubjectsRes])
 
     return (
-        <div className="p-5 w-full">
+        <div className="p-5 w-full h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
                 <Title label="Enrolled Subjects" />
                 <div className="flex gap-3">
@@ -120,14 +120,11 @@ const StudentSubjects = () => {
             )}
 
            {selectedSemester && enrolledSubjectsRes?.enrolledSubjects.length > 0 && (
-                <div className="flex justify-end mt-6">
+                <div className={`flex mt-6 ${selectedSemester ? 'justify-between' : 'justify-end'}`}>
+                    {selectedSemester && (
+                        <AddButton label="Add subject" onClick={() => setShowAddSubject(true)}/>
+                    )}
                     <h1 className="font-semibold text-lg">Total Tuition: {formatNumberToPeso(totalTuition)}</h1>
-                </div>
-            )}
-
-            {selectedSemester && (
-                <div className="fixed bottom-5 right-5">
-                    <AddButton label="Add subject" onClick={() => setShowAddSubject(true)}/>
                 </div>
             )}
 

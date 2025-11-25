@@ -125,3 +125,22 @@ export const getStudentThroughParams = async (req : Request, res : Response) => 
         res.status(500).json({ message: err.message || 'Server Error'})
     }
 }
+
+export const searchStudent = async (req : Request, res : Response) => {
+    try{
+
+        const { searchTerm } = req.query;
+
+        const student = await Student.findOne({ student_id: searchTerm });
+
+        if(!student){
+            res.status(404).json({ message: 'Student not found.'})
+            return;
+        }
+
+        res.status(200).json({ success: true, student });
+
+    }catch(err : any){
+        res.status(500).json({ message: err.message || "Server Error" });   
+    }
+}

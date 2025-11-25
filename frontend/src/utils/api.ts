@@ -42,3 +42,8 @@ export const deleteData = async (endpoint : string) => {
     return error.response.data
   }
 };
+
+export const logout = async () => {
+  await postData('/api/logout', {});
+  window.location.href = '/';
+}

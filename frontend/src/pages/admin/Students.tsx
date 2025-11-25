@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { AddButton, DeleteButton, EditButton } from "../../../components/Button";
-import { Title } from "../../../components/Text";
-import StudentModal from "./ui/StudentModal"; // ✅ Change Modal
-import useFetch from "../../../hooks/useFetch";
-import PurpleTable from "../../../components/Table";
+import { AddButton, DeleteButton, EditButton } from "../../components/Button";
+import { Title } from "../../components/Text";
+import StudentModal from "../../components/Modals/StudentModal"; // ✅ Change Modal
+import useFetch from "../../hooks/useFetch";
+import PurpleTable from "../../components/Table";
 import { CircularProgress, Pagination, Tooltip } from "@mui/material";
-import { deleteData } from "../../../utils/api";
-import { confirmDialog, errorAlert, successAlert } from "../../../utils/swal";
+import { deleteData } from "../../utils/api";
+import { confirmDialog, errorAlert, successAlert } from "../../utils/swal";
 import { Book } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useDebounce } from "../../../hooks/useDebounce";
-import { SearchField } from "../../../components/Textfield";
+import { useDebounce } from "../../hooks/useDebounce";
+import { SearchField } from "../../components/Textfield";
 
 const Students = () => {
     const [showModal, setShowModal] = useState(false);
@@ -47,7 +47,7 @@ const Students = () => {
     };
 
     return (
-        <div className="p-5 w-full">
+        <div className="p-5 w-full h-full flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
             <Title label="Students" />

@@ -1,11 +1,11 @@
 import { Modal, MenuItem } from "@mui/material";
 import { memo, useState } from "react";
 import { Check } from "lucide-react";
-import { confirmDialog, errorAlert, successAlert } from "../../../../utils/swal";
-import { postData } from "../../../../utils/api";
-import LoadingScreen from "../../../../components/Loading";
-import { PurpleTextField } from "../../../../components/Textfield";
-import { PurpleSelect } from "../../../../components/Select";
+import { confirmDialog, errorAlert, successAlert } from "../../utils/swal";
+import { postData } from "../../utils/api";
+import LoadingScreen from "../Loading";
+import { PurpleTextField } from "../Textfield";
+import { PurpleSelect, SchoolYear } from "../Select";
 
 interface SemesterModalProps {
   isOpen: boolean;
@@ -69,13 +69,7 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
             </h2>
 
             {/* School Year */}
-            <PurpleTextField
-            label="School Year (e.g., 2025-2026)"
-            value={schoolYear}
-            onChange={(e) => setSchoolYear(e.target.value)}
-            fullWidth
-            margin="normal"
-            />
+            <SchoolYear schoolYear={schoolYear} setSchoolYear={setSchoolYear}/>
 
             {/* Term */}
             <PurpleSelect

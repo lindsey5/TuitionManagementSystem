@@ -1,9 +1,8 @@
-import { useState } from 'react';
 import { 
     Home, 
     Users, 
     GraduationCap, 
-    DollarSign, 
+    Banknote, 
     Settings, 
     LogOut,
     ChevronLeft,
@@ -13,9 +12,9 @@ import {
     Book,
 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { logout } from '../../utils/api';
 
-export default function AdminSidebar() {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+export default function AdminSidebar({ isCollapsed, setIsCollapsed } : { isCollapsed : boolean, setIsCollapsed : React.Dispatch<React.SetStateAction<boolean>> }) {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -24,13 +23,13 @@ export default function AdminSidebar() {
         { id: 'courses', icon: BookOpen, label: 'Courses', path: '/admin/courses' },
         { id: 'subjects', icon: Book, label: 'Subjects', path: '/admin/subjects' },
         { id: 'students', icon: Users, label: 'Students', path: '/admin/students' },
-        { id: 'payments', icon: DollarSign, label: 'Payments', path: '/admin/payments' },
+        { id: 'payments', icon: Banknote, label: 'Payments', path: '/admin/payments' },
         { id: 'notifications', icon: Bell, label: 'Notifications', path: '/admin/notifications' },
         { id: 'settings', icon: Settings, label: 'Settings', path: '/admin/settings' },
     ];
 
     return (
-        <div className="flex h-screen bg-gray-100">
+        <div className="flex fixed inset-y-0 left-0 bg-gray-100 z-10">
         {/* Sidebar */}
         <div 
             className={`${
@@ -83,6 +82,7 @@ export default function AdminSidebar() {
                 })}
                 <li>
                     <button
+                        onClick={logout}
                         className="cursor-pointer w-full flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-purple-700/50"
                     >
                         <LogOut size={20} className="flex-shrink-0" />

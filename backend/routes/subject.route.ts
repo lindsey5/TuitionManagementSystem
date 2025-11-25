@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { createSubject, deleteSubject, editSubject, getAllSubjects } from "../controllers/subject.controller";
-import { adminRequireAuth } from "../middlewares/adminRequireAuth";
+import { requireAuth } from "../middlewares/auth";
 
 const router = Router();
 
-router.post('/', adminRequireAuth, createSubject);
-router.get('/', adminRequireAuth, getAllSubjects);
-router.put('/:id', adminRequireAuth, editSubject);
-router.delete('/:id', adminRequireAuth, deleteSubject);
+router.post('/', requireAuth('admin', 'registrar'), createSubject);
+router.get('/', requireAuth('admin', 'registrar'), getAllSubjects);
+router.put('/:id', requireAuth('admin', 'registrar'), editSubject);
+router.delete('/:id', requireAuth('admin', 'registrar'), deleteSubject);
 
 const subjectRoutes = router;
 

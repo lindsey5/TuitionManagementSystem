@@ -3,6 +3,7 @@ import {
     type SelectProps,
     FormControl,
     InputLabel,
+    MenuItem,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -41,3 +42,32 @@ export const PurpleSelect = ({ label, ...props }: PurpleSelectProps) => {
         </FormControl>
     );
 };
+
+interface SchoolYearProps {
+    schoolYear: string;
+    setSchoolYear: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export const SchoolYear = ({ schoolYear, setSchoolYear } : SchoolYearProps) => {
+    const startYear = 2022;
+    const totalYears = 10;
+
+    const years = Array.from({ length: totalYears }).map((_, i) => {
+    const start = startYear + i;
+    return `${start}-${start + 1}`;
+    });
+
+    return (
+        <PurpleSelect
+            label="School Year"
+            value={schoolYear}
+            onChange={(e) => setSchoolYear(e.target.value)}
+        >
+            {years.map((year) => (
+                <MenuItem key={year} value={year}>
+                    {year}
+                </MenuItem>
+            ))}
+        </PurpleSelect>
+    )
+}

@@ -1,12 +1,12 @@
 import { Modal, Chip } from "@mui/material";
 import { memo, useState } from "react";
 import { Check } from "lucide-react";
-import LoadingScreen from "../../../../components/Loading";
-import { SearchDropdown } from "../../../../components/Textfield";
-import { useDebounce } from "../../../../hooks/useDebounce";
-import useFetch from "../../../../hooks/useFetch";
-import { postData } from "../../../../utils/api";
-import { confirmDialog, errorAlert, successAlert } from "../../../../utils/swal";
+import LoadingScreen from "../Loading";
+import { SearchDropdown } from "../Textfield";
+import { useDebounce } from "../../hooks/useDebounce";
+import useFetch from "../../hooks/useFetch";
+import { postData } from "../../utils/api";
+import { confirmDialog, errorAlert, successAlert } from "../../utils/swal";
 
 interface EnrolledSubjectModalProps {
     isOpen: boolean;

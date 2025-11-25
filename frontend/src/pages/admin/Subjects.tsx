@@ -1,14 +1,14 @@
 import { useState } from "react";
-import { AddButton, DeleteButton, EditButton } from "../../../components/Button";
-import { Title } from "../../../components/Text";
-import SubjectModal from "./ui/SubjectModal";
-import useFetch from "../../../hooks/useFetch";
-import PurpleTable from "../../../components/Table";
+import { AddButton, DeleteButton, EditButton } from "../../components/Button";
+import { Title } from "../../components/Text";
+import SubjectModal from "../../components/Modals/SubjectModal";
+import useFetch from "../../hooks/useFetch";
+import PurpleTable from "../../components/Table";
 import { CircularProgress, Pagination } from "@mui/material";
-import { deleteData } from "../../../utils/api";
-import { confirmDialog, errorAlert, successAlert } from "../../../utils/swal";
-import { useDebounce } from "../../../hooks/useDebounce";
-import { SearchField } from "../../../components/Textfield";
+import { deleteData } from "../../utils/api";
+import { confirmDialog, errorAlert, successAlert } from "../../utils/swal";
+import { useDebounce } from "../../hooks/useDebounce";
+import { SearchField } from "../../components/Textfield";
 
 const Subjects = () => {
     const [showModal, setShowModal] = useState(false);
@@ -45,7 +45,7 @@ const Subjects = () => {
     };
 
     return (
-        <div className="p-5 w-full">
+        <div className="p-5 w-full h-full flex flex-col">
         <div className="flex items-center justify-between mb-6">
             <Title label="Subjects" />
             <AddButton onClick={() => setShowModal(true)} label="Add Subject" />

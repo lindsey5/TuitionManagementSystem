@@ -45,6 +45,16 @@ interface EnrolledSubject {
     semester: Semester;
 }
 
+interface Payment {
+    _id: string;
+    student_id: Student;
+    amount: number;
+    semester: Semester;
+    createdAt: Date;
+    balance: number;
+    remainingBalance: number;
+}
+
 interface Option {
   label: string;
   value: any;

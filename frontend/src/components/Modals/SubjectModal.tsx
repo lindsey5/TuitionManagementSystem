@@ -1,10 +1,10 @@
 import { Modal } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { PurpleTextField } from "../../../../components/Textfield";
-import { postData, updateData } from "../../../../utils/api";
-import LoadingScreen from "../../../../components/Loading";
-import { confirmDialog, errorAlert, successAlert } from "../../../../utils/swal";
+import { PurpleTextField } from "../Textfield";
+import { postData, updateData } from "../../utils/api";
+import LoadingScreen from "../Loading";
+import { confirmDialog, errorAlert, successAlert } from "../../utils/swal";
 
 interface SubjectModalProps {
     isOpen: boolean;

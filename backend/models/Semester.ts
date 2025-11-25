@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 import EnrolledSubject from "./EnrolledSubject";
+import Payment from "./Payment";
 
 export interface ISemester extends Document {
   student_id: Types.ObjectId;
@@ -50,6 +51,7 @@ SemesterSchema.pre("findOneAndDelete", async function (next) {
     const semester = await this.model.findOne(this.getFilter());
     if (semester) {
         await EnrolledSubject.deleteMany({ semester_id: semester._id });
+        await Payment.deleteMany({ semester: semester._id });
     }
     next();
 });
