@@ -6,6 +6,7 @@ import Courses from "./pages/admin/Courses";
 import Subjects from "./pages/admin/Subjects";
 import StudentSubjects from "./pages/admin/StudentSubjects";
 import Payments from "./pages/admin/Payments";
+import Dashboard from "./pages/admin/Dashboard";
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route index element={<LoginPage />} />
         <Route path="admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
           <Route path="courses" element={<Courses />} />
           <Route path="students" element={<Students />} />
           <Route path="subjects" element={<Subjects />} />

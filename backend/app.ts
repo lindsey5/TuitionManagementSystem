@@ -11,6 +11,9 @@ import semesterRoutes from './routes/semester.route';
 import enrolledSubjectRoutes from './routes/enrolledSubject.route';
 import { Request, Response } from 'express';
 import paymentRoutes from './routes/paymentRoute';
+import incomeRoutes from './routes/income.route';
+import { getDashboardData } from './controllers/income.controller';
+import { requireAuth } from './middlewares/auth';
 
 const app = express();
 
@@ -32,6 +35,7 @@ app.post('/api/logout', (req : Request, res : Response) =>{
     res.status(200).json({ success: true });
 })
 
+app.get('/api/dashboard', requireAuth('admin') ,getDashboardData);
 app.use('/api/admins', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
@@ -40,5 +44,6 @@ app.use('/api/students', studentRoutes);
 app.use('/api/semesters', semesterRoutes);
 app.use('/api/enrolled-subjects', enrolledSubjectRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/incomes', incomeRoutes);
 
 export default app
