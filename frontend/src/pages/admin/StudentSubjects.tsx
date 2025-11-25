@@ -21,8 +21,6 @@ const StudentSubjects = () => {
     const { data : enrolledSubjectsRes, loading : enrolledSubjectsLoading } = useFetch(`/api/enrolled-subjects?student_id=${id}&semester=${selectedSemester}`)
     const [showSemesterModal, setShowSemesterModal] = useState(false);
 
-    console.log(enrolledSubjectsRes)
-
     useEffect(() => {
         if(semesterRes?.semesters.length > 0 && !semesterLoading) setSelectedSemester(semesterRes.semesters[0]._id)
     }, [semesterRes])
@@ -41,13 +39,14 @@ const StudentSubjects = () => {
             window.location.reload();
         }
     };
-
     const semester = useMemo<Semester | undefined>(() => {
         if(!semesterRes?.semesters || semesterLoading) return undefined
         
         return semesterRes.semesters.find((semester : Semester) => semester._id === selectedSemester)
         
     }, [selectedSemester])
+
+    const { data : semesterData  } = useFetch(semester ?  `/api/semesters/data/${semester._id}` : '')
 
     const totalTuition = useMemo(() => {
         if(!enrolledSubjectsRes?.enrolledSubjects) return 0
@@ -57,6 +56,8 @@ const StudentSubjects = () => {
         }, 0);
 
     }, [enrolledSubjectsRes])
+
+    console.log(semesterData)
 
     return (
         <div className="p-5 w-full h-full flex flex-col">
@@ -106,6 +107,7 @@ const StudentSubjects = () => {
                 </div>
             )}
             
+            <div className="p-3 bg-white rounded-md border border-gray-200 shadow-lg min-h-0 flex flex-col flex-grow gap-5">
             {!enrolledSubjectsLoading && enrolledSubjectsRes?.enrolledSubjects.length > 0 && (
                 <PurpleTable 
                     columns={['Subject', 'Code', 'Units', 'Semester', 'Amount']}
@@ -118,13 +120,20 @@ const StudentSubjects = () => {
                     })) || []}
                 />
             )}
+                <div className="flex justify-end">
+                    <div className="space-y-2">
+                        <h1>Total Tuition: {formatNumberToPeso(totalTuition || 0)}</h1>
+                        <h1>Paid Amount: {formatNumberToPeso(semesterData?.totalPaid || 0)}</h1>
+                        <h1 className="font-semibold text-lg">Remaining Balance: {formatNumberToPeso(semesterData?.balance || 0)}</h1>
+                    </div>
+                </div>
+            </div>
 
            {selectedSemester && enrolledSubjectsRes?.enrolledSubjects.length > 0 && (
-                <div className={`flex mt-6 ${selectedSemester ? 'justify-between' : 'justify-end'}`}>
+                <div className="flex mt-6 items-center justify-end">
                     {selectedSemester && (
                         <AddButton label="Add subject" onClick={() => setShowAddSubject(true)}/>
                     )}
-                    <h1 className="font-semibold text-lg">Total Tuition: {formatNumberToPeso(totalTuition)}</h1>
                 </div>
             )}
 
