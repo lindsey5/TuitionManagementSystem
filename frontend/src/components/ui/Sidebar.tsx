@@ -1,34 +1,36 @@
 import { 
-    Home, 
-    Users, 
     GraduationCap, 
-    Banknote, 
-    Settings, 
     LogOut,
     ChevronLeft,
     ChevronRight,
-    Bell,
-    BookOpen,
-    Book,
+    type LucideIcon,
 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '../../utils/api';
-import { useUser } from '../../contexts/UserContext';
 
-export default function AdminSidebar({ isCollapsed, setIsCollapsed } : { isCollapsed : boolean, setIsCollapsed : React.Dispatch<React.SetStateAction<boolean>> }) {
+interface SidebarProps {
+    isCollapsed : boolean
+    setIsCollapsed : React.Dispatch<React.SetStateAction<boolean>>
+    menuItems: { id: string, icon: LucideIcon, label: string, path: string }[]
+    firstname: string
+    lastname: string
+    email: string
+    title: string
+    subtitle: string;
+}
+
+export default function Sidebar({ 
+    isCollapsed, 
+    setIsCollapsed,
+    menuItems,
+    firstname,
+    lastname,
+    email,
+    title,
+    subtitle
+} : SidebarProps) {
     const location = useLocation();
     const navigate = useNavigate();
-    const { user } = useUser<Admin>();
-
-    const menuItems = [
-        { id: 'dashboard', icon: Home, label: 'Dashboard', path: '/admin' },
-        { id: 'courses', icon: BookOpen, label: 'Courses', path: '/admin/courses' },
-        { id: 'subjects', icon: Book, label: 'Subjects', path: '/admin/subjects' },
-        { id: 'students', icon: Users, label: 'Students', path: '/admin/students' },
-        { id: 'payments', icon: Banknote, label: 'Payments', path: '/admin/payments' },
-        { id: 'notifications', icon: Bell, label: 'Notifications', path: '/admin/notifications' },
-        { id: 'settings', icon: Settings, label: 'Settings', path: '/admin/settings' },
-    ];
 
     return (
         <div className="flex fixed inset-y-0 left-0 bg-gray-100 z-10">
@@ -46,8 +48,8 @@ export default function AdminSidebar({ isCollapsed, setIsCollapsed } : { isColla
                     <GraduationCap className="w-6 h-6" />
                 </div>
                 <div>
-                    <h1 className="font-bold text-lg">TMS Admin</h1>
-                    <p className="text-xs text-purple-300">Management Panel</p>
+                    <h1 className="font-bold text-lg">{title}</h1>
+                    <p className="text-xs text-purple-300">{subtitle}</p>
                 </div>
                 </div>
             )}
@@ -101,11 +103,11 @@ export default function AdminSidebar({ isCollapsed, setIsCollapsed } : { isColla
             <div className="p-4 border-t border-purple-700">
                 <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center font-bold">
-                {user?.firstname.charAt(0)} {user?.lastname.charAt(0)}
+                {firstname.charAt(0)} {lastname.charAt(0)}
                 </div>
                 <div className="flex-1">
-                    <p className="font-semibold text-sm">{`${user?.firstname} ${user?.lastname}`}</p>
-                    <p className="text-xs text-purple-300">{user?.email}</p>
+                    <p className="font-semibold text-sm">{`${firstname} ${lastname}`}</p>
+                    <p className="text-xs text-purple-300">{email}</p>
                 </div>
                 </div>
             </div>

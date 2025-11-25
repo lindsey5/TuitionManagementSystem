@@ -1,14 +1,14 @@
 import { Navigate, Outlet } from "react-router-dom"
-import AdminSidebar from "../components/ui/Sidebar"
 import { useState } from "react";
 import { useUser } from "../contexts/UserContext";
+import AdminSidebar from "../components/ui/AdminSidebar";
 
 interface User extends Admin {
   role: "admin" | "student" | "registrar";
 }
 
 const AdminLayout = () => {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
     const { user, loading } = useUser<User>();
 
     if(loading) return;

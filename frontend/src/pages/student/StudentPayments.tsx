@@ -74,7 +74,7 @@ const StudentPayments = () => {
                 onClose={() => setSelectedPayment(undefined)}
                 payment_id={selectedPayment || ''}
             />
-            {data?.students.length > 0 && (
+            {data?.payments.length > 0 && (
                 <Pagination
                     sx={{ marginTop: '20px' }}
                     page={page}

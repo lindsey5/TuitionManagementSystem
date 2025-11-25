@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/auth/Login";
 import AdminLayout from "./layouts/AdminLayout";
 import Students from "./pages/admin/Students";
@@ -32,6 +32,7 @@ function App() {
             <Route index element={<StudentEnrolledSubjects />}/>
             <Route path="payments" element={<StudentPayments />} />
           </Route>
+          <Route path="*" element={<Navigate to='/'/>}/>
         </Routes>
       </BrowserRouter>
     </UserContextProvider>
