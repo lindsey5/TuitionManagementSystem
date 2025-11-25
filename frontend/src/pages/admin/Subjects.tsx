@@ -45,7 +45,7 @@ const Subjects = () => {
     };
 
     return (
-        <div className="p-5 w-full h-full flex flex-col">
+        <div className="p-5 w-full md:h-full flex flex-col">
         <div className="flex items-center justify-between mb-6">
             <Title label="Subjects" />
             <AddButton onClick={() => setShowModal(true)} label="Add Subject" />

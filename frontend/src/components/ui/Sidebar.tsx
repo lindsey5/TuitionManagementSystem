@@ -13,10 +13,12 @@ import {
 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '../../utils/api';
+import { useUser } from '../../contexts/UserContext';
 
 export default function AdminSidebar({ isCollapsed, setIsCollapsed } : { isCollapsed : boolean, setIsCollapsed : React.Dispatch<React.SetStateAction<boolean>> }) {
     const location = useLocation();
     const navigate = useNavigate();
+    const { user } = useUser<Admin>();
 
     const menuItems = [
         { id: 'dashboard', icon: Home, label: 'Dashboard', path: '/admin' },
@@ -99,11 +101,11 @@ export default function AdminSidebar({ isCollapsed, setIsCollapsed } : { isColla
             <div className="p-4 border-t border-purple-700">
                 <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center font-bold">
-                    AD
+                {user?.firstname.charAt(0)} {user?.lastname.charAt(0)}
                 </div>
                 <div className="flex-1">
-                    <p className="font-semibold text-sm">Admin User</p>
-                    <p className="text-xs text-purple-300">admin@tms.com</p>
+                    <p className="font-semibold text-sm">{`${user?.firstname} ${user?.lastname}`}</p>
+                    <p className="text-xs text-purple-300">{user?.email}</p>
                 </div>
                 </div>
             </div>

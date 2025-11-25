@@ -6,7 +6,7 @@ type PurpleTableProps = {
 
 const PurpleTable = ({ columns, data, className = 'hidden md:block h-full overflow-y-auto' }: PurpleTableProps) => {
     return (
-        <div className="min-h-0 flex-grow w-full bg-white shadow-sm rounded-lg border border-gray-200">
+        <div className="min-h-0 flex-grow w-full md:bg-white md:shadow-sm rounded-lg border border-gray-200">
         <div className={className}>
             <table className="min-w-full border-collapse">
             <thead className="bg-purple-600 text-white text-left text-sm font-medium sticky top-0">
@@ -36,7 +36,7 @@ const PurpleTable = ({ columns, data, className = 'hidden md:block h-full overfl
         </div>
 
         {/* ✅ Mobile View */}
-        <div className="block md:hidden h-full overflow-y-auto flex flex-col gap-4 p-4">
+        <div className="block md:hidden flex flex-col gap-4 p-4">
             {data.map((row, index) => (
                 <div
                     key={index}

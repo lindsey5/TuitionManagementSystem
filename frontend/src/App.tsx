@@ -7,23 +7,26 @@ import Subjects from "./pages/admin/Subjects";
 import StudentSubjects from "./pages/admin/StudentSubjects";
 import Payments from "./pages/admin/Payments";
 import Dashboard from "./pages/admin/Dashboard";
+import { UserContextProvider } from "./contexts/UserContext";
 
 function App() {
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route index element={<LoginPage />} />
-        <Route path="admin" element={<AdminLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="courses" element={<Courses />} />
-          <Route path="students" element={<Students />} />
-          <Route path="subjects" element={<Subjects />} />
-          <Route path="student-subjects/:id" element={<StudentSubjects />} />
-          <Route path="payments" element={<Payments />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <UserContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<LoginPage />} />
+          <Route path="admin" element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="courses" element={<Courses />} />
+            <Route path="students" element={<Students />} />
+            <Route path="subjects" element={<Subjects />} />
+            <Route path="student-subjects/:id" element={<StudentSubjects />} />
+            <Route path="payments" element={<Payments />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </UserContextProvider>
   )
 }
 

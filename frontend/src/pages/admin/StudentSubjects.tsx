@@ -60,7 +60,7 @@ const StudentSubjects = () => {
     console.log(semesterData)
 
     return (
-        <div className="p-5 w-full h-full flex flex-col">
+        <div className="p-5 w-full md:h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
                 <Title label="Enrolled Subjects" />
                 <div className="flex gap-3">

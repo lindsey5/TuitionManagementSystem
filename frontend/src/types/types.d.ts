@@ -1,3 +1,11 @@
+interface Admin {
+    _id: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    password: string;
+}
+
 interface Course {
     _id?: string;
     name: string;
