@@ -1,9 +1,10 @@
 import { useState } from "react"
-import { Title } from "../../components/Text"
-import ManageProfile from "../../components/ui/ManageProfile"
-import { useUser } from "../../contexts/UserContext"
+import { Title } from "../components/Text"
+import ManageProfile from "../components/ui/ManageProfile"
+import { useUser } from "../contexts/UserContext"
+import ChangePassword from "../components/ui/ChangePassword"
 
-const ProfileSettings = <T extends ProfileBase>({ profileApiUrl } : { profileApiUrl : string}) => {
+const ProfileSettings = <T extends ProfileBase>({ profileApiUrl, passwordApiUrl } : { profileApiUrl : string, passwordApiUrl : string}) => {
     const [activeTab, setActiveTab] = useState<'Profile' | 'Password'>('Profile')
     const { user } = useUser<T>();
 
@@ -21,6 +22,7 @@ const ProfileSettings = <T extends ProfileBase>({ profileApiUrl } : { profileApi
                 >Manage Password</button>
             </div>
             {activeTab === 'Profile' && <ManageProfile<T> user={user} profileApiUrl={profileApiUrl}/>}
+            {activeTab === 'Password' && <ChangePassword passwordApiUrl={passwordApiUrl} />}
         </div>
     )
 }

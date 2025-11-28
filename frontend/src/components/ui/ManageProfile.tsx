@@ -32,6 +32,7 @@ const ManageProfile = <T extends ProfileBase>({ user : userState, profileApiUrl 
     return (
         <form onSubmit={handleSave} className="w-full border border-gray-300 space-y-6 shadow-md p-5 rounded-lg">
             <LoadingScreen loading={loading}/>
+            {user?.student_id && <strong>Student ID: {user?.student_id}</strong>}
             <p className="text-purple-500 text-sm">Id: {user?._id}</p>
             <div className="grid md:grid-cols-2 gap-4">
                 <PurpleTextField 

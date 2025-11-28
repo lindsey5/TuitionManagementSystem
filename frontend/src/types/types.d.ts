@@ -24,7 +24,7 @@ interface Subject {
 }
 
 interface Student {
-    _id?: string;
+    _id: string;
     student_id: string;
     firstname: string;
     middlename?: string;
@@ -65,6 +65,7 @@ interface Payment {
 
 interface ProfileBase{
     _id: string;
+    student_id?: string;
     firstname: string;
     lastname: string;
     email: string;

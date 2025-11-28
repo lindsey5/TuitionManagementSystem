@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createStudent, deleteStudent, editStudent, getAllStudents, getStudentThroughParams, searchStudent } from "../controllers/student.controller";
+import { createStudent, deleteStudent, editStudent, editStudentProfile, getAllStudents, getStudentThroughParams, searchStudent } from "../controllers/student.controller";
 import { requireAuth } from "../middlewares/auth";
 
 const router = Router();
@@ -8,6 +8,7 @@ router.post('/', requireAuth('admin', 'registrar'), createStudent);
 router.get('/', requireAuth('admin', 'registrar'), getAllStudents);
 router.get('/search', requireAuth('admin', 'registrar'), searchStudent);
 router.get('/:id', requireAuth('admin', 'registrar'), getStudentThroughParams);
+router.put('/', requireAuth('student'), editStudentProfile);
 router.put('/:id', requireAuth('admin', 'registrar'), editStudent);
 router.delete('/:id', requireAuth('admin', 'registrar'), deleteStudent);
 

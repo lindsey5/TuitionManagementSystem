@@ -7,30 +7,19 @@ import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
 Charts(FusionCharts);
 FusionTheme(FusionCharts);
 
-export type ChartType =
-    | "line"
-    | "spline"
-    | "area2d"
-    | "column2d"
-    | "bar2d"
-    | "doughnut2d"
-    | "pie2d";
-
 interface LineChartProps {
     title: string;
     yName: string;
     data: { label: string; value: string | number }[];
-    type?: ChartType; 
 }
 
 const LineChart: FC<LineChartProps> = ({
     title,
     yName,
     data,
-    type = "line",
 }) => {
     const chartConfigs = {
-        type,
+        type: 'line',
         width: "100%",
         height: "500",
         dataFormat: "json" as const,

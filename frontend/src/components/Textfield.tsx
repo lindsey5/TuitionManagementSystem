@@ -1,7 +1,7 @@
 import { InputAdornment } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import TextField, { type TextFieldProps } from "@mui/material/TextField";
-import { SearchIcon } from "lucide-react";
+import { Eye, EyeOff, SearchIcon } from "lucide-react";
 import { useState } from "react";
 
 export const PurpleTextField = styled((props: TextFieldProps) => (
@@ -20,6 +20,41 @@ export const PurpleTextField = styled((props: TextFieldProps) => (
         color: "#7e22ce", // purple-700
     },
 });
+
+export const PasswordField = ({
+    value,
+    onChange,
+    label,
+    placeholder,
+} : {
+    value: string,
+    onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
+    label: string,
+    placeholder: string
+}) => {
+    const [show, setShow] = useState(false);
+
+    return (
+        <div className="relative">
+            <PurpleTextField 
+                fullWidth
+                type={show ? 'text' : 'password'}
+                value={value}
+                onChange={onChange}
+                sx={{ paddingRight: '5px' }}
+                placeholder={placeholder}
+                label={label}
+            />
+            <button 
+                type="button" 
+                className="absolute right-5 top-1/2 transform -translate-y-1/2"
+                onClick={() => setShow(!show)}
+            >
+                {show ? <EyeOff /> : <Eye />}
+            </button>
+        </div>
+    )
+}
 
 type SearchFieldProps = {
     placeholder?: string;

@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import generatePassword from "../utils/password";
 import { sendStudentEmail } from "../services/emailService";
 import { getStudentById } from "../services/studentService";
+import { AuthenticatedRequest } from "../types/types";
 
 export const createStudent = async (req : Request, res : Response) => {
     try{
@@ -88,6 +89,35 @@ export const editStudent = async (req : Request, res : Response) => {
             res.status(404).json({ message: "Student not found" });
             return;
         }
+        res.status(200).json({ success: true, student });
+
+    }catch(error : any){
+        res.status(500).json({ message: error.message || "Server Error" });   
+    }
+}
+
+export const editStudentProfile = async (req : AuthenticatedRequest, res : Response) => {
+    try{
+        const { firstname, lastname, email } = req.body;
+        const id = req.user_id;
+        
+        const isEmailExist = await Student.findOne({ email: req.body.email, _id: { $ne: id} });
+        if(isEmailExist){
+            res.status(409).json({ message: 'Email already exists'});
+            return;
+        }
+
+        const student = await Student.findById(id);
+        if(!student){
+            res.status(404).json({ message: "Student not found" });
+            return;
+        }
+
+        student.email = email || student.email;
+        student.firstname = firstname || student.firstname;
+        student.lastname = lastname || student.lastname;
+        await student.save();
+
         res.status(200).json({ success: true, student });
 
     }catch(error : any){
