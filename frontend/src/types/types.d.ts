@@ -63,6 +63,13 @@ interface Payment {
     remainingBalance: number;
 }
 
+interface ProfileBase{
+    _id: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+}
+
 interface Option {
   label: string;
   value: any;

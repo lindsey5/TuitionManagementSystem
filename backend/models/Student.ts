@@ -11,6 +11,7 @@ export interface IStudent extends Document {
     gender: string;
     email: string;
     password: string;
+    status: 'active' | 'removed';
 }
 
 // Define the schema
@@ -52,7 +53,6 @@ const StudentSchema: Schema<IStudent> = new Schema(
         email: {
             type: String,
             required: true,
-            unique: true,
             lowercase: true,
             trim: true,
         },
@@ -61,6 +61,12 @@ const StudentSchema: Schema<IStudent> = new Schema(
             required: true,
             minlength: 8,
         },
+        status: {
+            type: String,
+            enum: ['active', 'removed'],
+            required: true,
+            default: 'active'
+        }
     },
     { timestamps: true }
 );

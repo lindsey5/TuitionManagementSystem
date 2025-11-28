@@ -1,4 +1,4 @@
-import { Banknote, Book, BookOpen, Home, PersonStanding, Settings, Users } from "lucide-react";
+import { Banknote, Book, BookOpen, Home, PersonStanding, Settings, User, Users } from "lucide-react";
 import { useUser } from "../../contexts/UserContext";
 import Sidebar from "./Sidebar";
 
@@ -12,7 +12,7 @@ export default function AdminSidebar({ isCollapsed, setIsCollapsed } : { isColla
         { id: 'students', icon: Users, label: 'Students', path: '/admin/students' },
         { id: 'payments', icon: Banknote, label: 'Payments', path: '/admin/payments' },
         { id: 'registrars', icon: PersonStanding, label: 'Registrars', path: '/admin/registrars' },
-        { id: 'settings', icon: Settings, label: 'Settings', path: '/admin/settings' },
+        { id: 'profile', icon: User, label: 'Profile', path: '/admin/profile' },
     ];
 
     return (

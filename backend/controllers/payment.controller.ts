@@ -43,7 +43,6 @@ export const createPayment = async (req: Request, res: Response) => {
 };
 
 export const getPayments = async (req : Request, res : Response) => {
-
     try{
         const { page, limit, searchTerm } = req.query;
         const pageNumber = parseInt(page as string) || 1;

@@ -7,7 +7,7 @@ import Student from "../models/Student"
 export const getStudentById = async (id : string) => {
     try{
         const student = await Student.findById(id).populate('course');
-
+        if(student?.status === 'removed') throw new Error('Student not found')
         return student;
 
     }catch(err : any){

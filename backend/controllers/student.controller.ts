@@ -6,7 +6,6 @@ import { getStudentById } from "../services/studentService";
 
 export const createStudent = async (req : Request, res : Response) => {
     try{
-
         const isEmailExist = await Student.findOne({ email: req.body.email });
         if(isEmailExist){
             res.status(409).json({ message: 'Email already exists'});
@@ -38,7 +37,7 @@ export const getAllStudents = async (req : Request, res : Response) => {
         const limitNumber = parseInt(limit as string) || 10;
         const skip = (pageNumber - 1) * limitNumber;
 
-        let query : any = { };
+        let query : any = { status: 'active' };
         if(searchTerm){ 
             query.$or = [
                 { firstname: { $regex: searchTerm, $options: 'i' } },
@@ -98,11 +97,14 @@ export const editStudent = async (req : Request, res : Response) => {
 
 export const deleteStudent = async (req : Request, res : Response) => {
     try{
-        const student  = await Student.findOneAndDelete({ _id: req.params.id });
+        const student  = await Student.findById(req.params.id);
         if(!student){
             res.status(404).json({ message: 'Student not found.'});
             return;
         }
+
+        student.status = 'removed';
+        await student.save();
         res.status(200).json({ success: true, message: 'Student successfully deleted.'})
 
     }catch(error : any){
@@ -131,7 +133,7 @@ export const searchStudent = async (req : Request, res : Response) => {
 
         const { searchTerm } = req.query;
 
-        const student = await Student.findOne({ student_id: searchTerm });
+        const student = await Student.findOne({ student_id: searchTerm, status: 'active' });
 
         if(!student){
             res.status(404).json({ message: 'Student not found.'})

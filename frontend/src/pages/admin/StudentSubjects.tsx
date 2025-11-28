@@ -127,7 +127,7 @@ const StudentSubjects = () => {
                 </div>
             </div>
 
-           {selectedSemester && enrolledSubjectsRes?.enrolledSubjects.length > 0 && (
+           {selectedSemester &&  (
                 <div className="flex mt-6 items-center justify-end">
                     {selectedSemester && (
                         <AddButton label="Add subject" onClick={() => setShowAddSubject(true)}/>
