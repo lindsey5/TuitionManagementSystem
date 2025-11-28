@@ -1,4 +1,4 @@
-import { Banknote, Book, BookOpen, Home, PersonStanding, Settings, User, Users } from "lucide-react";
+import { Banknote, Book, BookOpen, Home, PersonStanding, User, Users } from "lucide-react";
 import { useUser } from "../../contexts/UserContext";
 import Sidebar from "./Sidebar";
 

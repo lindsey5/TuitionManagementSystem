@@ -32,6 +32,7 @@ const LineChart: FC<LineChartProps> = ({
     const chartConfigs = {
         type,
         width: "100%",
+        height: "500",
         dataFormat: "json" as const,
         dataSource: {
         chart: {
