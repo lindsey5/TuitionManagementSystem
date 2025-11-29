@@ -11,6 +11,7 @@ import { deleteData } from "../../utils/api";
 import AddEnrolledSubject from "../../components/Modals/AddEnrolledSubject";
 import PurpleTable from "../../components/Table";
 import { formatNumberToPeso } from "../../utils/utils";
+import { formatDate } from "../../utils/date";
 
 const StudentSubjects = () => {
     const { id } = useParams();
@@ -76,6 +77,8 @@ const StudentSubjects = () => {
                             <>
                             <h1>Semester: {semester?.term} Term ({semester?.schoolYear})</h1>
                             <h1>Price Per Unit: {formatNumberToPeso(semester?.pricePerUnit || 0)}</h1>
+                            <h1>Enrollment Classification: {semester?.classification}</h1>
+                            {semester?.due_date && <h1>Due Date: {formatDate(semester?.due_date)}</h1>}
                             </>
                         )}
                     </div>
@@ -105,8 +108,8 @@ const StudentSubjects = () => {
                 </div>
             )}
             
-            <div className="p-3 bg-white rounded-md border border-gray-200 shadow-lg min-h-0 flex flex-col flex-grow gap-5">
             {!enrolledSubjectsLoading && enrolledSubjectsRes?.enrolledSubjects.length > 0 && (
+                <div className="p-3 bg-white rounded-md border border-gray-200 shadow-lg min-h-0 flex flex-col flex-grow gap-5">
                 <PurpleTable 
                     columns={['Subject', 'Code', 'Units', 'Semester', 'Amount']}
                     data={enrolledSubjectsRes?.enrolledSubjects.map((enrolledSubject : EnrolledSubject) => ({
@@ -117,15 +120,16 @@ const StudentSubjects = () => {
                         "Amount": formatNumberToPeso(enrolledSubject.semester.pricePerUnit * enrolledSubject.subject.units)
                     })) || []}
                 />
-            )}
                 <div className="flex justify-end">
                     <div className="space-y-2">
                         <h1>Total Tuition: {formatNumberToPeso(totalTuition || 0)}</h1>
+                        {semester?.discount !== 0 && <h1 className="text-red-500">Discount: - {semester?.discount} %</h1>}
                         <h1>Paid Amount: {formatNumberToPeso(semesterData?.totalPaid || 0)}</h1>
-                        <h1 className="font-semibold text-lg">Remaining Balance: {formatNumberToPeso(semesterData?.balance || 0)}</h1>
+                        <h1 className="font-semibold text-lg">Remaining Balance: {formatNumberToPeso(semester?.remainingBalance || 0)}</h1>
                     </div>
                 </div>
-            </div>
+                </div>
+            )}
 
            {selectedSemester &&  (
                 <div className="flex mt-6 items-center justify-end">

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import Semester from "../models/Semester";
 import { AuthenticatedRequest } from "../types/types";
-import { getRemainingBalance } from "../services/studentService";
 import { Types } from "mongoose";
+import { getTotalPaid } from "../services/studentService";
 
 export const createSemester = async (req : Request, res : Response) => {
     try{
@@ -80,9 +80,9 @@ export const getSemesterById = async (req : Request, res: Response) => {
             return;
         }
 
-        const balance = await getRemainingBalance(semester.student_id.toString(), (semester._id as Types.ObjectId).toString());
+        const totalPaid = await getTotalPaid(semester.student_id.toString(), (semester._id as Types.ObjectId).toString());
 
-        res.status(200).json({ success: true, semester, ...balance });
+        res.status(200).json({ success: true, semester, totalPaid });
 
     }catch(err : any){
         res.status(500).json({ message: err.message || 'Server Error'})

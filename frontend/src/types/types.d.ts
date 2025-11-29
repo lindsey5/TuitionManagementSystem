@@ -44,6 +44,11 @@ interface Semester {
     enrollmentStatus: "Regular" | "Irregular";
     course: Course;
     pricePerUnit: number;
+    discount: number;
+    due_date?: Date;
+    remainingBalance: number;
+    totalTuition: number;
+    classification: "regular" | "full_scholar" | "partial_scholar" | "academic_grant" | "athlete_scholar" | "sponsored"
 }
 
 interface EnrolledSubject {

@@ -6,7 +6,7 @@ const MonthlyIncomes = () => {
     const { data, loading } = useFetch('/api/incomes/monthly');
 
     return (
-        <div className="bg-white border border-gray-200 shadow-lg w-full relative flex justify-center">
+        <div className="h-[500px] bg-white border border-gray-200 shadow-lg w-full relative flex justify-center">
             {loading ? <CircularProgress /> : (
                 <LineChart 
                     title="Month Incomes"

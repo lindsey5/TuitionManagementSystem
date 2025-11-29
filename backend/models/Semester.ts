@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
-import EnrolledSubject from "./EnrolledSubject";
+import EnrolledSubject, { IEnrolledSubject } from "./EnrolledSubject";
 import Payment from "./Payment";
 
 export interface ISemester extends Document {
@@ -9,6 +9,12 @@ export interface ISemester extends Document {
   enrollmentStatus: "Regular" | "Irregular";
   course: Types.ObjectId;
   pricePerUnit: number;
+  discount: number;
+  due_date?: Date;
+  totalTuition: number;
+  remainingBalance: number;
+  classification: "regular" | "full_scholar" | "partial_scholar" | "academic_grant" | "athlete_scholar" | "sponsored"
+  enrolledSubjects?: IEnrolledSubject[]
 }
 
 const SemesterSchema: Schema<ISemester> = new Schema(
@@ -41,10 +47,50 @@ const SemesterSchema: Schema<ISemester> = new Schema(
     pricePerUnit: {
       type: Number,
       required: true,
+    },
+    totalTuition: {
+      type: Number,
+      required: true,
+      default: 0
+    },
+    remainingBalance: {
+      type: Number,
+      required: true,
+      default: 0
+    },
+    classification: {
+      type: String,
+      enum: [
+        "regular",
+        "full_scholar",
+        "partial_scholar",
+        "academic_grant",
+        "athlete_scholar",
+        "sponsored",
+      ],
+      required: true
+    },
+    discount: {
+      type: Number,
+      required: true,
+      default: 0,
+      min: 0,
+      max: 100
+    },
+    due_date: {
+      type: Date,
+      required: false
     }
   },
   { timestamps: true }
 );
+
+SemesterSchema.virtual("enrolledsubjects", {
+  ref: "EnrolledSubject",
+  localField: "_id",
+  foreignField: "semester",
+  justOne: false,   
+});
 
 // Cascade delete StudentSubjects when a Semester is deleted
 SemesterSchema.pre("findOneAndDelete", async function (next) {

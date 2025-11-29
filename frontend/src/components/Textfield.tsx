@@ -26,17 +26,15 @@ export const PasswordField = ({
     onChange,
     label,
     placeholder,
-} : {
-    value: string,
-    onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>,
-    label: string,
-    placeholder: string
-}) => {
+    ...props
+} : TextFieldProps
+) => {
     const [show, setShow] = useState(false);
 
     return (
         <div className="relative">
             <PurpleTextField 
+                {...props}
                 fullWidth
                 type={show ? 'text' : 'password'}
                 value={value}

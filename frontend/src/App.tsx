@@ -11,7 +11,8 @@ import { UserContextProvider } from "./contexts/UserContext";
 import StudentLayout from "./layouts/StudentLayout";
 import StudentEnrolledSubjects from "./pages/student/StudentEnrolledSubject";
 import StudentPayments from "./pages/student/StudentPayments";
-import ProfileSettings from "./pages/ProfileSettings";
+import ProfileSettings from "./components/ui/ProfileSettings";
+import Registrars from "./pages/admin/Registrars";
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
             <Route path="subjects" element={<Subjects />} />
             <Route path="student-subjects/:id" element={<StudentSubjects />} />
             <Route path="payments" element={<Payments />} />
+            <Route path="registrars" element={<Registrars />} />
             <Route path="profile" element={<ProfileSettings<Admin> profileApiUrl="/api/admins" passwordApiUrl="/api/admins/password"/>} />
           </Route>
 

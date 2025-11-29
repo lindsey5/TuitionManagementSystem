@@ -4,6 +4,7 @@ import generatePassword from "../utils/password";
 import { sendStudentEmail } from "../services/emailService";
 import { getStudentById } from "../services/studentService";
 import { AuthenticatedRequest } from "../types/types";
+import Semester from "../models/Semester";
 
 export const createStudent = async (req : Request, res : Response) => {
     try{

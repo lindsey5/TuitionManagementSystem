@@ -1,15 +1,41 @@
 import { Request, Response } from "express";
 import EnrolledSubject from "../models/EnrolledSubject";
 import { AuthenticatedRequest } from "../types/types";
+import Semester from "../models/Semester";
+import Subject from "../models/Subject";
 
 export const createEnrolledSubject = async (req : Request, res : Response) => {
     try{
+        const semester = await Semester.findById(req.body.semester);
+
+        if(!semester){
+            res.status(404).json({ message: 'Semester not found.'})
+            return;
+        }
+
+        const subject = await Subject.findById(req.body.subject);
+
+        if(!subject){
+            res.status(404).json({ message: 'Subject not found.'})
+            return;
+        }
+
         const isExist = await EnrolledSubject.findOne(req.body);
 
         if(isExist){
             res.status(409).json({ message: 'Subject already exists'})
             return;
         }
+
+        const subjectTuition = subject.units * semester.pricePerUnit;
+        const discountAmount = ((semester.totalTuition + subjectTuition) * semester.discount) / 100;
+        const totalTuition = semester.totalTuition + subjectTuition - discountAmount;
+        semester.totalTuition = totalTuition;
+        
+        if(semester.classification !== 'full_scholar'){
+            semester.remainingBalance += subjectTuition;
+        }
+        await semester.save();
 
         const enrolledSubject = await EnrolledSubject.create(req.body);
 

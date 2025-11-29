@@ -6,6 +6,7 @@ import {  CircularProgress, MenuItem } from "@mui/material";
 import PurpleTable from "../../components/Table";
 import { formatNumberToPeso } from "../../utils/utils";
 import { useUser } from "../../contexts/UserContext";
+import { formatDate } from "../../utils/date";
 
 const StudentEnrolledSubjects = () => {
     const { user, loading : studentLoading } = useUser<Student>();
@@ -24,7 +25,7 @@ const StudentEnrolledSubjects = () => {
         
     }, [selectedSemester])
 
-    const { data : semesterData, loading : semesterLoading } = useFetch(semester ?  `/api/semesters/data/${semester._id}` : '')
+    const { data : semesterData } = useFetch(semester ?  `/api/semesters/data/${semester._id}` : '')
 
     const totalTuition = useMemo(() => {
         if(!enrolledSubjectsRes?.enrolledSubjects) return 0
@@ -48,6 +49,8 @@ const StudentEnrolledSubjects = () => {
                             <>
                             <h1>Semester: {semester?.term} Term ({semester?.schoolYear})</h1>
                             <h1>Price Per Unit: {formatNumberToPeso(semester?.pricePerUnit || 0)}</h1>
+                            <h1>Enrollment Classification: {semester?.classification}</h1>
+                            {semester?.due_date && <h1>Due Date: {formatDate(semester?.due_date)}</h1>}
                             </>
                         )}
                     </div>
@@ -69,11 +72,11 @@ const StudentEnrolledSubjects = () => {
             </div>
 
             {semestersRes?.semesters.length < 1 && (
-                <p className="text-center text-gray-500 mt-20">No semesters yet. Please add new one</p>
+                <p className="text-center text-gray-500 mt-20">No enrolled semesters yet</p>
             )}
 
             {selectedSemester && enrolledSubjectsRes?.enrolledSubjects.length < 1 && (
-                <p className="text-center text-gray-500 mt-20">No enrolled subjects found. Please add new one</p>
+                <p className="text-center text-gray-500 mt-20">No enrolled subjects yet</p>
             )}
 
             {enrolledSubjectsLoading && (
@@ -82,8 +85,8 @@ const StudentEnrolledSubjects = () => {
                 </div>
             )}
             
-            <div className="p-3 bg-white rounded-md border border-gray-200 shadow-lg min-h-0 flex flex-col flex-grow gap-5">
             {!enrolledSubjectsLoading && enrolledSubjectsRes?.enrolledSubjects.length > 0 && (
+                <div className="p-3 bg-white rounded-md border border-gray-200 shadow-lg min-h-0 flex flex-col flex-grow gap-5">
                 <PurpleTable 
                     columns={['Subject', 'Code', 'Units', 'Semester', 'Amount']}
                     data={enrolledSubjectsRes?.enrolledSubjects.map((enrolledSubject : EnrolledSubject) => ({
@@ -94,19 +97,16 @@ const StudentEnrolledSubjects = () => {
                         "Amount": formatNumberToPeso(enrolledSubject.semester.pricePerUnit * enrolledSubject.subject.units)
                     })) || []}
                 />
-            )}
-                <div className="hidden md:flex justify-end">
-                    {semesterLoading ?  <CircularProgress /> : (
-                        <div className="space-y-2">
-                            {semesterData?.semester && <>
-                            <h1>Total Tuition: {formatNumberToPeso(totalTuition || 0)}</h1>
-                            <h1>Paid Amount: {formatNumberToPeso(semesterData?.totalPaid || 0)}</h1>
-                            <h1 className="font-semibold text-lg">Remaining Balance: {formatNumberToPeso(semesterData?.balance || 0)}</h1>
-                            </>}
-                        </div>
-                    )}
+                <div className="flex justify-end">
+                    <div className="space-y-2">
+                        <h1>Total Tuition: {formatNumberToPeso(totalTuition || 0)}</h1>
+                        {semester?.discount !== 0 && <h1 className="text-red-500">Discount: - {semester?.discount} %</h1>}
+                        <h1>Paid Amount: {formatNumberToPeso(semesterData?.totalPaid || 0)}</h1>
+                        <h1 className="font-semibold text-lg">Remaining Balance: {formatNumberToPeso(semester?.remainingBalance || 0)}</h1>
+                    </div>
                 </div>
-            </div>
+                </div>
+            )}
         </div>
     )
 }

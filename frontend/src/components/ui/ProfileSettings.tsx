@@ -1,8 +1,8 @@
 import { useState } from "react"
-import { Title } from "../components/Text"
-import ManageProfile from "../components/ui/ManageProfile"
-import { useUser } from "../contexts/UserContext"
-import ChangePassword from "../components/ui/ChangePassword"
+import { Title } from "../Text"
+import ManageProfile from "./ManageProfile"
+import { useUser } from "../../contexts/UserContext"
+import ChangePassword from "./ChangePassword"
 
 const ProfileSettings = <T extends ProfileBase>({ profileApiUrl, passwordApiUrl } : { profileApiUrl : string, passwordApiUrl : string}) => {
     const [activeTab, setActiveTab] = useState<'Profile' | 'Password'>('Profile')

@@ -1,15 +1,23 @@
 import { Request, Response } from "express";
-import { getRemainingBalance } from "../services/studentService";
+import { getTotalPaid } from "../services/studentService";
 import Payment from "../models/Payment";
 import EnrolledSubject from "../models/EnrolledSubject";
 import mongoose from "mongoose";
+import Semester from "../models/Semester";
 
 export const createPayment = async (req: Request, res: Response) => {
     try {
         const { student_id, semester, amount } = req.body;
 
+        const studentSemester = await Semester.findById(req.body.semester);
+
+        if(!studentSemester){
+            res.status(404).json({ message: 'Semester not found.'})
+            return;
+        }
+
         // Get current balance
-        const { balance } = await getRemainingBalance(student_id, semester);
+        const balance = studentSemester.remainingBalance;
 
         // Already fully paid
         if (balance === 0) {
@@ -29,6 +37,8 @@ export const createPayment = async (req: Request, res: Response) => {
             balance,
             remainingBalance: balance - amount
         });
+        studentSemester.remainingBalance -= balance - amount
+        await studentSemester.save();
 
         return res.status(200).json({ 
             success: true, 
@@ -107,8 +117,9 @@ export const getPaymentById = async (req : Request, res : Response) => {
         }
 
         const enrolledSubjects = await EnrolledSubject.find({ semester: payment.semester._id }).populate('subject');
-        const { balance, totalPaid, totalTuition } = await getRemainingBalance(payment.student_id._id.toString(), payment.semester._id.toString());
-        res.status(200).json({ success: true, enrolledSubjects, payment, balance, totalPaid, totalTuition })
+        
+        const totalPaid = await getTotalPaid(payment.student_id._id.toString(), payment.semester._id.toString());
+        res.status(200).json({ success: true, enrolledSubjects, payment, totalPaid })
 
     }catch(error : any){
         res.status(500).json({ message: error.message || "Server Error" });   

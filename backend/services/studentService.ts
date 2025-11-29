@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import EnrolledSubject from "../models/EnrolledSubject";
 import Payment from "../models/Payment";
 import Semester from "../models/Semester";
 import Student from "../models/Student"
@@ -15,7 +14,7 @@ export const getStudentById = async (id : string) => {
     }
 }
 
-export const getRemainingBalance = async (student_id : string, semester_id: string) => {
+export const getTotalPaid = async (student_id : string, semester_id: string) => {
     try{
         const semester = await Semester.findById(semester_id);
     
@@ -49,17 +48,9 @@ export const getRemainingBalance = async (student_id : string, semester_id: stri
                 }
             },
         ])
-        const enrolledSubjects = await EnrolledSubject.find({ student_id: student_id, semester: semester_id }).populate('subject');
-
-        const totalTuition = enrolledSubjects.reduce((total, enrolledSubjects : any) => enrolledSubjects.subject.units * semester.pricePerUnit + total, 0)
         const totalPaid = total[0]?.totalPaid || 0;
-        const balance = totalTuition - totalPaid;
 
-        return {
-            balance,
-            totalPaid,
-            totalTuition
-        }
+        return totalPaid
     }catch(err : any){
         throw new Error(err.message);
     }

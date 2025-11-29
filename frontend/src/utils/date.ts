@@ -29,3 +29,12 @@ export const formatDate = (dateString?: string | Date): string => {
 
     return `${month}-${day}-${year}`;
 };
+
+export const getTomorrow = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1); // add 1 day
+    const yyyy = tomorrow.getFullYear();
+    const mm = String(tomorrow.getMonth() + 1).padStart(2, "0");
+    const dd = String(tomorrow.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+};

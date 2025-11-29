@@ -60,6 +60,8 @@ const PaymentModal = ({ isOpen, onClose } : PaymentModalProps) => {
         }
     }
 
+    console.log(semesterData)
+
     return (
         <>
         <ReceiptModal 
@@ -86,9 +88,9 @@ const PaymentModal = ({ isOpen, onClose } : PaymentModalProps) => {
                         
                         {semesterData?.semester && (
                             <>
-                            <p className="text-sm">Total Tuition: {formatNumberToPeso(semesterData?.totalTuition || 0)}</p>
+                            <p className="text-sm">Total Tuition: {formatNumberToPeso(semesterData?.semester.totalTuition || 0)}</p>
                             <p className="text-sm">Paid: {formatNumberToPeso(semesterData?.totalPaid || 0)}</p>
-                            <p className="text-sm">Remaining Balance: {formatNumberToPeso(semesterData?.balance || 0)}</p>
+                            <p className="text-sm">Remaining Balance: {formatNumberToPeso(semesterData?.semester.remainingBalance || 0)}</p>
                             </>
                         )}
                         <PurpleSelect
