@@ -12,6 +12,7 @@ import AddEnrolledSubject from "../components/Modals/AddEnrolledSubject";
 import PurpleTable from "../components/Table";
 import { formatNumberToPeso } from "../utils/utils";
 import { formatDateLong } from "../utils/date";
+import LoadingScreen from "../components/Loading";
 
 const StudentSubjects = () => {
     const { id } = useParams();
@@ -63,6 +64,7 @@ const StudentSubjects = () => {
 
     return (
         <div className="p-5 w-full md:h-full flex flex-col">
+            <LoadingScreen loading={loading}/>
             <div className="flex items-center justify-between mb-4">
                 <Title label="Enrolled Subjects" />
                 <div className="flex gap-3">
