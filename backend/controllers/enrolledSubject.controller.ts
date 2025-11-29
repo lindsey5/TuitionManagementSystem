@@ -3,6 +3,8 @@ import EnrolledSubject from "../models/EnrolledSubject";
 import { AuthenticatedRequest } from "../types/types";
 import Semester from "../models/Semester";
 import Subject from "../models/Subject";
+import { getTotalPaid } from "../services/studentService";
+import { Types } from "mongoose";
 
 export const createEnrolledSubject = async (req : Request, res : Response) => {
     try{
@@ -33,8 +35,10 @@ export const createEnrolledSubject = async (req : Request, res : Response) => {
         semester.totalTuition = totalTuition;
         
         if(semester.classification !== 'full_scholar'){
-            semester.remainingBalance += subjectTuition;
+            const totalPaid = await getTotalPaid(semester.student_id.toString(), (semester._id as Types.ObjectId).toString());
+            semester.remainingBalance = totalTuition - totalPaid;
         }
+
         await semester.save();
 
         const enrolledSubject = await EnrolledSubject.create(req.body);

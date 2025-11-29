@@ -6,7 +6,7 @@ import {  CircularProgress, MenuItem } from "@mui/material";
 import PurpleTable from "../../components/Table";
 import { formatNumberToPeso } from "../../utils/utils";
 import { useUser } from "../../contexts/UserContext";
-import { formatDate } from "../../utils/date";
+import { formatDateLong } from "../../utils/date";
 
 const StudentEnrolledSubjects = () => {
     const { user, loading : studentLoading } = useUser<Student>();
@@ -50,7 +50,7 @@ const StudentEnrolledSubjects = () => {
                             <h1>Semester: {semester?.term} Term ({semester?.schoolYear})</h1>
                             <h1>Price Per Unit: {formatNumberToPeso(semester?.pricePerUnit || 0)}</h1>
                             <h1>Enrollment Classification: {semester?.classification}</h1>
-                            {semester?.due_date && <h1>Due Date: {formatDate(semester?.due_date)}</h1>}
+                            {semester?.due_date && <h1>Due Date: {formatDateLong(semester?.due_date)}</h1>}
                             </>
                         )}
                     </div>
