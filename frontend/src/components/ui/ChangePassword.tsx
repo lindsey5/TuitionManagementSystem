@@ -3,6 +3,7 @@ import { PasswordField } from "../Textfield"
 import { confirmDialog, successAlert } from "../../utils/swal"
 import { updateData } from "../../utils/api"
 import { PurpleButton } from "../Button"
+import LoadingScreen from "../Loading"
 
 const ChangePassword = ({ passwordApiUrl } : { passwordApiUrl : string}) => {
     const [password, setPassword] = useState({
@@ -10,17 +11,20 @@ const ChangePassword = ({ passwordApiUrl } : { passwordApiUrl : string}) => {
         newPassword: '',
         confirmNewPassword: ''
     })
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     const changePassword = async (e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (password.newPassword !== password.confirmNewPassword) {
             setError("New password and confirm password do not match.");
+            return;
         }
 
         if (await confirmDialog('Confirm', 'Are you sure you want to change your password?')) {
+            setLoading(true)
             const response = await updateData(passwordApiUrl, { currentPassword: password.currentPassword, newPassword: password.newPassword});
-
+            setLoading(false)
             if(!response.success){
                 setError(response.message);
                 return;
@@ -33,6 +37,7 @@ const ChangePassword = ({ passwordApiUrl } : { passwordApiUrl : string}) => {
 
     return (
         <form onSubmit={changePassword} className="w-full border border-gray-300 space-y-6 shadow-md p-5 rounded-lg">
+            <LoadingScreen loading={loading}/>
             {error && <p className="text-red-500">{error}</p>}
             <div className="grid md:grid-cols-2 gap-4">
                 <PasswordField 

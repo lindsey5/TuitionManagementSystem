@@ -10,10 +10,11 @@ import studentRoutes from './routes/student.route';
 import semesterRoutes from './routes/semester.route';
 import enrolledSubjectRoutes from './routes/enrolledSubject.route';
 import { Request, Response } from 'express';
-import paymentRoutes from './routes/paymentRoute';
+import paymentRoutes from './routes/payment.route';
 import incomeRoutes from './routes/income.route';
 import { getDashboardData } from './controllers/income.controller';
 import { requireAuth } from './middlewares/auth';
+import registrarRoutes from './routes/registrar.route';
 
 const app = express();
 
@@ -45,5 +46,6 @@ app.use('/api/semesters', semesterRoutes);
 app.use('/api/enrolled-subjects', enrolledSubjectRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/incomes', incomeRoutes);
+app.use('/api/registrars', registrarRoutes);
 
 export default app

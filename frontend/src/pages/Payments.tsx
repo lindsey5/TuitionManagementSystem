@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { AddButton } from "../../components/Button";
-import { Title } from "../../components/Text";
-import useFetch from "../../hooks/useFetch";
-import PurpleTable from "../../components/Table";
+import { AddButton } from "../components/Button";
+import { Title } from "../components/Text";
+import useFetch from "../hooks/useFetch";
+import PurpleTable from "../components/Table";
 import { CircularProgress, Pagination } from "@mui/material";
-import { useDebounce } from "../../hooks/useDebounce";
-import { SearchField } from "../../components/Textfield";
-import PaymentModal from "../../components/Modals/PaymentModal";
-import { formatNumberToPeso } from "../../utils/utils";
-import { formatDateTime } from "../../utils/date";
-import ReceiptModal from "../../components/Modals/ReceiptModal";
+import { useDebounce } from "../hooks/useDebounce";
+import { SearchField } from "../components/Textfield";
+import PaymentModal from "../components/Modals/PaymentModal";
+import { formatNumberToPeso } from "../utils/utils";
+import { formatDateTime } from "../utils/date";
+import ReceiptModal from "../components/Modals/ReceiptModal";
 import { Eye } from "lucide-react";
 
 const Payments = () => {

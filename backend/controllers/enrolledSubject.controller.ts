@@ -8,7 +8,7 @@ import { Types } from "mongoose";
 
 export const createEnrolledSubject = async (req : Request, res : Response) => {
     try{
-        const semester = await Semester.findById(req.body.semester);
+        const semester = await Semester.findById(req.body.semester).populate('enrolledsubjects');
 
         if(!semester){
             res.status(404).json({ message: 'Semester not found.'})
@@ -29,9 +29,13 @@ export const createEnrolledSubject = async (req : Request, res : Response) => {
             return;
         }
 
-        const subjectTuition = subject.units * semester.pricePerUnit;
-        const discountAmount = ((semester.totalTuition + subjectTuition) * semester.discount) / 100;
-        const totalTuition = semester.totalTuition + subjectTuition - discountAmount;
+        const enrolledSubject = await EnrolledSubject.create(req.body);
+
+        const enrolledSubjects = await EnrolledSubject.find({ student_id: req.body.student_id, semester: semester._id }).populate('subject');
+        
+        const totalBeforeDiscount = enrolledSubjects.reduce((total, enrolledSubject: any) => total + semester.pricePerUnit * enrolledSubject.subject.units, 0);
+        
+        const totalTuition = totalBeforeDiscount - (totalBeforeDiscount * (semester.discount / 100));
         semester.totalTuition = totalTuition;
         
         if(semester.classification !== 'full_scholar'){
@@ -40,8 +44,6 @@ export const createEnrolledSubject = async (req : Request, res : Response) => {
         }
 
         await semester.save();
-
-        const enrolledSubject = await EnrolledSubject.create(req.body);
 
         res.status(201).json({ success: true, enrolledSubject });
 

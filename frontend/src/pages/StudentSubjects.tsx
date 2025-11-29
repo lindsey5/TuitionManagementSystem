@@ -1,17 +1,17 @@
 import { Navigate, useParams } from "react-router-dom";
-import { Title } from "../../components/Text";
-import { AddButton } from "../../components/Button";
+import { Title } from "../components/Text";
+import { AddButton } from "../components/Button";
 import { useEffect, useMemo, useState } from "react";
-import SemesterModal from "../../components/Modals/SemesterModal";
-import useFetch from "../../hooks/useFetch";
-import { PurpleSelect } from "../../components/Select";
+import SemesterModal from "../components/Modals/SemesterModal";
+import useFetch from "../hooks/useFetch";
+import { PurpleSelect } from "../components/Select";
 import { Button, CircularProgress, MenuItem } from "@mui/material";
-import { confirmDialog, errorAlert } from "../../utils/swal";
-import { deleteData } from "../../utils/api";
-import AddEnrolledSubject from "../../components/Modals/AddEnrolledSubject";
-import PurpleTable from "../../components/Table";
-import { formatNumberToPeso } from "../../utils/utils";
-import { formatDateLong } from "../../utils/date";
+import { confirmDialog, errorAlert } from "../utils/swal";
+import { deleteData } from "../utils/api";
+import AddEnrolledSubject from "../components/Modals/AddEnrolledSubject";
+import PurpleTable from "../components/Table";
+import { formatNumberToPeso } from "../utils/utils";
+import { formatDateLong } from "../utils/date";
 
 const StudentSubjects = () => {
     const { id } = useParams();
@@ -21,6 +21,7 @@ const StudentSubjects = () => {
     const { data : semesterRes, loading : semesterLoading } = useFetch(`/api/semesters/${id}`);
     const { data : enrolledSubjectsRes, loading : enrolledSubjectsLoading } = useFetch(`/api/enrolled-subjects?student_id=${id}&semester=${selectedSemester}`)
     const [showSemesterModal, setShowSemesterModal] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if(semesterRes?.semesters.length > 0 && !semesterLoading) setSelectedSemester(semesterRes.semesters[0]._id)
@@ -32,7 +33,9 @@ const StudentSubjects = () => {
 
     const handleDeleteSemester = async () => {
         if (await confirmDialog("Are you sure?", "Do you really want to delete this semester?")) {
+            setLoading(true)
             const response = await deleteData(`/api/semesters/${selectedSemester}`);
+            setLoading(false)
             if (!response.success) {
                 errorAlert("Error", response.message || "Failed to delete semester.");
                 return;

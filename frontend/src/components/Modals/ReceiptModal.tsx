@@ -1,7 +1,7 @@
 import { X } from 'lucide-react';
 import { Modal } from '@mui/material';
 import useFetch from '../../hooks/useFetch';
-import { formatDateTime } from '../../utils/date';
+import { formatDateLong, formatDateTime } from '../../utils/date';
 import { formatNumberToPeso } from '../../utils/utils';
 import LoadingScreen from '../Loading';
 
@@ -19,6 +19,8 @@ const ReceiptModal = ({ open, onClose, payment_id } : ReceiptModalProps) => {
     if(loading) {
         return <LoadingScreen loading />
     }
+
+    console.log(data)
 
     return (
             <Modal 
@@ -47,8 +49,9 @@ const ReceiptModal = ({ open, onClose, payment_id } : ReceiptModalProps) => {
                 <div className="mb-4 text-center">
                     <p className="font-bold text-lg mb-1">TUITION PAYMENT RECEIPT</p>
                     <p className="text-sm">Semester: {data?.payment.semester.term} ({data?.payment.semester.schoolYear})</p>
-                     <p className="text-sm">Price per unit: {formatNumberToPeso(data?.payment.semester.pricePerUnit)}</p>
-                    <p className="text-sm">{formatDateTime(data?.payment.createdAt)}</p>
+                    <p className="text-sm">Price per unit: {formatNumberToPeso(data?.payment.semester.pricePerUnit)}</p>
+                    {data?.payment.semester.due_date && <p className="text-sm">Due Date:{formatDateLong(data?.payment.semester.due_date)}</p>}
+                    <p className="text-sm">Payment Date:{formatDateTime(data?.payment.createdAt)}</p>
                 </div>
 
                 {/* Items */}
@@ -77,20 +80,20 @@ const ReceiptModal = ({ open, onClose, payment_id } : ReceiptModalProps) => {
                 <div className="border-t-2 border-dashed border-gray-400 pt-3 mb-4">
                     <div className="flex justify-between mb-1">
                     <span>TOTAL TUITION:</span>
-                    <span>{formatNumberToPeso(data?.totalTuition)}</span>
+                    <span>{formatNumberToPeso(data?.payment.semester.totalTuition || 0)}</span>
                     </div>
                     <div className="flex justify-between mb-1">
                     <span>BALANCE BEFORE PAYMENT:</span>
-                    <span>{formatNumberToPeso(data?.payment.balance)}</span>
+                    <span>{formatNumberToPeso(data?.payment.balance || 0)}</span>
                     </div>
                     <div className="border-t border-gray-300 pt-2 mt-2">
                         <div className="flex justify-between mt-3 mb-1">
                             <span>Payment:</span>
-                            <span>{formatNumberToPeso(data?.payment.amount)}</span>
+                            <span>{formatNumberToPeso(data?.payment.amount || 0)}</span>
                         </div>
                         <div className="flex justify-between font-bold text-base">
                             <span>REMAINING BALANCE:</span>
-                            <span>{formatNumberToPeso(data?.payment.remainingBalance)}</span>
+                            <span>{formatNumberToPeso(data?.payment.semester.remainingBalance || 0)}</span>
                         </div>
                     </div>
                 </div>

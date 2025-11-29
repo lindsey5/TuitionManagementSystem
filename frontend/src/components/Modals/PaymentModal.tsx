@@ -60,8 +60,6 @@ const PaymentModal = ({ isOpen, onClose } : PaymentModalProps) => {
         }
     }
 
-    console.log(semesterData)
-
     return (
         <>
         <ReceiptModal 

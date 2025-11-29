@@ -14,7 +14,7 @@ export interface ISemester extends Document {
   totalTuition: number;
   remainingBalance: number;
   classification: "regular" | "full_scholar" | "partial_scholar" | "academic_grant" | "athlete_scholar" | "sponsored"
-  enrolledSubjects?: IEnrolledSubject[]
+  enrolledsubjects?: IEnrolledSubject[]
 }
 
 const SemesterSchema: Schema<ISemester> = new Schema(
@@ -91,6 +91,9 @@ SemesterSchema.virtual("enrolledsubjects", {
   foreignField: "semester",
   justOne: false,   
 });
+
+SemesterSchema.set("toObject", { virtuals: true });
+SemesterSchema.set("toJSON", { virtuals: true });
 
 // Cascade delete StudentSubjects when a Semester is deleted
 SemesterSchema.pre("findOneAndDelete", async function (next) {

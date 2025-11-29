@@ -6,7 +6,8 @@ import { getTotalPaid } from "../services/studentService";
 
 export const createSemester = async (req : Request, res : Response) => {
     try{
-        const isExist = await Semester.findOne(req.body);
+        const { student_id, term, schoolYear } = req.body;
+        const isExist = await Semester.findOne({ student_id, term, schoolYear });
 
         if(isExist){
             res.status(409).json({ message: 'Semester already exists'});

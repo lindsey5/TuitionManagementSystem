@@ -40,7 +40,7 @@ export default function LoginPage() {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        const user = userType === 'admin' ? 'admin' : userType === 'registrar' ? 'regitrar' : 'student' 
+        const user = userType === 'admin' ? 'admin' : userType === 'registrar' ? 'registrar' : 'student' 
 
         const response = await postData(`/api/auth/${user}`, { email, password})
 

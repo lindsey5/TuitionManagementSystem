@@ -95,20 +95,20 @@ const StudentModal = ({ isOpen, onClose, student }: StudentModalProps) => {
 
             {/* Grid Layout for Inputs */}
             <div className="grid grid-cols-2 gap-3">
-            <PurpleTextField label="Student ID" value={studentId} onChange={(e) => setStudentId(e.target.value)} fullWidth />
+                <PurpleTextField label="Student ID" value={studentId} onChange={(e) => setStudentId(e.target.value)} fullWidth />
 
-            <PurpleTextField label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} fullWidth />
+                <PurpleTextField label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} fullWidth />
 
-            <PurpleTextField label="First Name" value={firstname} onChange={(e) => setFirstname(e.target.value)} fullWidth />
+                <PurpleTextField label="First Name" value={firstname} onChange={(e) => setFirstname(e.target.value)} fullWidth />
 
-            <PurpleTextField label="Middle Name (Optional)" value={middlename} onChange={(e) => setMiddlename(e.target.value)} fullWidth />
+                <PurpleTextField label="Middle Name (Optional)" value={middlename} onChange={(e) => setMiddlename(e.target.value)} fullWidth />
 
-            <PurpleTextField label="Last Name" value={lastname} onChange={(e) => setLastname(e.target.value)} fullWidth />
+                <PurpleTextField label="Last Name" value={lastname} onChange={(e) => setLastname(e.target.value)} fullWidth />
 
-            <PurpleTextField select label="Gender" value={gender} onChange={(e) => setGender(e.target.value)} fullWidth>
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-            </PurpleTextField>
+                <PurpleTextField select label="Gender" value={gender} onChange={(e) => setGender(e.target.value)} fullWidth>
+                    <MenuItem value="Male">Male</MenuItem>
+                    <MenuItem value="Female">Female</MenuItem>
+                </PurpleTextField>
             </div>
 
             {/* Full Width Dropdown for Course */}

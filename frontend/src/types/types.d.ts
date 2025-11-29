@@ -68,6 +68,15 @@ interface Payment {
     remainingBalance: number;
 }
 
+interface Registrar {
+    _id: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    password: string;
+    createdAt: Date;
+}
+
 interface ProfileBase{
     _id: string;
     student_id?: string;
