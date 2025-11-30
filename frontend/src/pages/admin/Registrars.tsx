@@ -40,7 +40,7 @@ const Registrars = () => {
 
 
     return (
-        <div className="p-5 w-full md:h-full flex flex-col">
+        <div className="md:h-screen p-5 w-full flex flex-col">
             <RegistrarModal 
                 isOpen={showModal}
                 registrar={selectedRegistrar}

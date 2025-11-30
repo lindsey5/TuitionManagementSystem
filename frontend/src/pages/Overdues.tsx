@@ -32,7 +32,7 @@ const OverdueStudents = () => {
     }
 
     return (    
-        <div className="p-5 w-full md:h-full flex flex-col gap-10">
+        <div className="p-5 w-full md:h-screen flex flex-col gap-10">
             <Title label="Overdue Students" />
             {loading ? (
             <div className="w-full flex justify-center items-center h-64">

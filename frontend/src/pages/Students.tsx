@@ -55,7 +55,7 @@ const Students = () => {
     };
 
     return (
-        <div className="p-5 w-full md:h-full flex flex-col">
+        <div className="p-5 w-full md:h-screen flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
             <Title label="Students" />
