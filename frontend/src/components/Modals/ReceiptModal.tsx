@@ -63,14 +63,14 @@ const ReceiptModal = ({ open, onClose, payment_id } : ReceiptModalProps) => {
                     </div>
                     </div>
                     
-                    {data?.enrolledSubjects.map((subject : EnrolledSubject, idx : number) => (
+                    {data?.payment.subjects.map((subject : Subject, idx : number) => (
                     <div key={idx} className="mb-2">
                         <div className="flex justify-between">
-                        <span className="flex-1 pr-2">{subject.subject.name} ({subject.subject.code})</span>
-                        <span className="whitespace-nowrap">{formatNumberToPeso(subject.subject.units * data?.payment.semester.pricePerUnit)}</span>
+                        <span className="flex-1 pr-2">{subject.name} ({subject.code})</span>
+                        <span className="whitespace-nowrap">{formatNumberToPeso(subject.units * data?.payment.semester.pricePerUnit)}</span>
                         </div>
                         <div className="text-xs text-gray-600 ml-2">
-                            {subject.subject.units} Units
+                            {subject.units} Units
                         </div>
                     </div>
                     ))}

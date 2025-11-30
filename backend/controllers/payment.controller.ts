@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import { getTotalPaid } from "../services/studentService";
 import Payment from "../models/Payment";
-import EnrolledSubject from "../models/EnrolledSubject";
-import mongoose from "mongoose";
 import Semester from "../models/Semester";
 
 export const createPayment = async (req: Request, res: Response) => {
@@ -40,7 +38,9 @@ export const createPayment = async (req: Request, res: Response) => {
             semester,
             amount,
             balance,
-            remainingBalance: balance - amount
+            remainingBalance: balance - amount,
+            total: studentSemester.totalTuition,
+            subjects: studentSemester.enrolledsubjects?.map(subject => subject.subject),
         });
         studentSemester.remainingBalance = balance - amount
         await studentSemester.save();
@@ -71,14 +71,23 @@ export const getPayments = async (req : Request, res : Response) => {
             ];
         }
 
-        const payments = await Payment.find(query)
-            .populate(['semester', 'student_id'])
+        const payments = await Payment.find({})
+            .populate({
+                path: 'student_id',
+                match: searchTerm
+                    ? { student_id: { $regex: searchTerm, $options: "i" } }
+                    : {},
+            })
+            .populate("semester")
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limitNumber);
+
+        // remove payments where populate returned null
+        const filteredPayments = payments.filter(p => p.student_id !== null);
         const total = await Payment.countDocuments(query);
 
-        res.status(200).json({ success: true, payments, total, page: pageNumber, totalPages: Math.ceil(total / limitNumber) });
+        res.status(200).json({ success: true, payments: filteredPayments, total, page: pageNumber, totalPages: Math.ceil(total / limitNumber) });
        
     }catch(error : any){
         res.status(500).json({ message: error.message || "Server Error" });   
@@ -88,7 +97,7 @@ export const getPayments = async (req : Request, res : Response) => {
 export const getMyPayments = async (req : Request, res : Response) => {
 
     try{
-        const { page, limit, semester } = req.query;
+        const { page, limit } = req.query;
         const pageNumber = parseInt(page as string) || 1;
         const limitNumber = parseInt(limit as string) || 10;
         const skip = (pageNumber - 1) * limitNumber;
@@ -109,17 +118,15 @@ export const getMyPayments = async (req : Request, res : Response) => {
 
 export const getPaymentById = async (req : Request, res : Response) => {
     try{
-        const payment = await Payment.findById(req.params.id).populate(['semester', 'student_id']);
+        const payment = await Payment.findById(req.params.id).populate(['semester', 'student_id', 'subjects']);
 
         if(!payment){
             res.status(404).json({ message: 'Payment not found.'})
             return;
         }
 
-        const enrolledSubjects = await EnrolledSubject.find({ semester: payment.semester._id }).populate('subject');
-        
         const totalPaid = await getTotalPaid(payment.student_id._id.toString(), payment.semester._id.toString());
-        res.status(200).json({ success: true, enrolledSubjects, payment, totalPaid })
+        res.status(200).json({ success: true, payment, totalPaid })
 
     }catch(error : any){
         res.status(500).json({ message: error.message || "Server Error" });   

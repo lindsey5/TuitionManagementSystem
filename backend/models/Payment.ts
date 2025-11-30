@@ -6,6 +6,8 @@ export interface IPayment extends Document {
     semester: Types.ObjectId;
     balance: number;
     remainingBalance: number;
+    total: number;
+    subjects: Types.ObjectId[];
 }
 
 const PaymentSchema: Schema<IPayment> = new Schema(
@@ -28,16 +30,27 @@ const PaymentSchema: Schema<IPayment> = new Schema(
         balance: {
             type: Number,
             required: true,
-            min: 0
+            min: 0,
         },
         remainingBalance: {
             type: Number,
             required: true,
-            min: 0
-        }
+            min: 0,
+        },
+        subjects: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Subject",
+                required: false,
+            },
+        ],
     },
     { timestamps: true }
 );
+
+
+PaymentSchema.set("toObject", { virtuals: true });
+PaymentSchema.set("toJSON", { virtuals: true });
 
 const Payment = mongoose.model<IPayment>("Payment", PaymentSchema);
 
