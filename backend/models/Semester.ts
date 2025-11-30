@@ -14,7 +14,8 @@ export interface ISemester extends Document {
   totalTuition: number;
   remainingBalance: number;
   classification: "regular" | "full_scholar" | "partial_scholar" | "academic_grant" | "athlete_scholar" | "sponsored"
-  enrolledsubjects?: IEnrolledSubject[]
+  enrolledsubjects?: IEnrolledSubject[];
+  status: 'active' | 'removed';
 }
 
 const SemesterSchema: Schema<ISemester> = new Schema(
@@ -80,6 +81,12 @@ const SemesterSchema: Schema<ISemester> = new Schema(
     due_date: {
       type: Date,
       required: false
+    },
+    status: {
+      type: String,
+      enum: ['active', 'removed'],
+      default: 'active',
+      required: true
     }
   },
   { timestamps: true }

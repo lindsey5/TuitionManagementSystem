@@ -205,9 +205,9 @@ export default function LoginPage() {
                                         <label htmlFor="password" className="block text-sm font-medium text-purple-900">
                                             Password
                                         </label>
-                                        <button type="button" className="text-xs text-purple-600 hover:text-purple-900 font-medium">
+                                        {userType === 'student' && <button type="button" className="text-xs text-purple-600 hover:text-purple-900 font-medium">
                                             Forgot password?
-                                        </button>
+                                        </button>}
                                     </div>
                                     <div className="relative">
                                         <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400" />

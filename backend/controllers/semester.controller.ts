@@ -7,7 +7,7 @@ import { getTotalPaid } from "../services/studentService";
 export const createSemester = async (req : Request, res : Response) => {
     try{
         const { student_id, term, schoolYear } = req.body;
-        const isExist = await Semester.findOne({ student_id, term, schoolYear });
+        const isExist = await Semester.findOne({ student_id, term, schoolYear, status: 'active' });
 
         if(isExist){
             res.status(409).json({ message: 'Semester already exists'});
@@ -24,8 +24,7 @@ export const createSemester = async (req : Request, res : Response) => {
 
 export const getStudentSemesters = async (req : Request, res : Response) => {
     try{
-
-        const semesters = await Semester.find({ student_id: req.params.id }).populate("course")
+        const semesters = await Semester.find({ student_id: req.params.id, status: 'active' }).populate("course")
         res.status(200).json({ success: true, semesters });
 
     }catch(err : any){
@@ -36,7 +35,7 @@ export const getStudentSemesters = async (req : Request, res : Response) => {
 
 export const getMySemesters = async (req : AuthenticatedRequest, res : Response) => {
     try{
-        const semesters = await Semester.find({ student_id: req.user_id }).populate("course")
+        const semesters = await Semester.find({ student_id: req.user_id, status: 'active' }).populate("course")
         res.status(200).json({ success: true, semesters });
 
     }catch(err : any){
@@ -48,7 +47,7 @@ export const getMySemesters = async (req : AuthenticatedRequest, res : Response)
 export const getAuthenticatedSemesters = async (req : AuthenticatedRequest, res : Response) => {
     try{
 
-        const semesters = await Semester.find({ student_id: req.user_id }).populate("course")
+        const semesters = await Semester.find({ student_id: req.user_id, status: 'active' }).populate("course")
         res.status(200).json({ success: true, semesters });
 
     }catch(err : any){
@@ -59,11 +58,14 @@ export const getAuthenticatedSemesters = async (req : AuthenticatedRequest, res 
 
 export const deleteSemester = async (req : Request, res : Response) => {
     try{
-        const semester = await Semester.findOneAndDelete({ _id: req.params.id });
+        const semester = await Semester.findById({ _id: req.params.id });
         if(!semester){
             res.status(404).json({ message: 'Semester not found.'});
             return;
         }
+
+        semester.status = 'removed';
+        await semester.save();
 
         res.status(200).json({ success: true, message: 'Semester successfully deleted' })
 

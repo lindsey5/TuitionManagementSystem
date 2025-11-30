@@ -1,10 +1,11 @@
 import Student from "../models/Student";
 import { Request, Response } from "express";
 import generatePassword from "../utils/password";
-import { sendStudentEmail } from "../services/emailService";
+import { sendOverdueNotificationEmail, sendStudentEmail } from "../services/emailService";
 import { getStudentById } from "../services/studentService";
 import { AuthenticatedRequest } from "../types/types";
 import Semester from "../models/Semester";
+import { formatDateLong } from "../utils/date";
 
 export const createStudent = async (req : Request, res : Response) => {
     try{
@@ -175,5 +176,64 @@ export const searchStudent = async (req : Request, res : Response) => {
 
     }catch(err : any){
         res.status(500).json({ message: err.message || "Server Error" });   
+    }
+}
+
+export const getOverdueStudents = async (req : Request, res : Response) => {
+    try{
+        const { page, limit } = req.query;
+        const pageNumber = parseInt(page as string) || 1;
+        const limitNumber = parseInt(limit as string) || 10;
+        const skip = (pageNumber - 1) * limitNumber;
+
+        const query : any = { status: 'active', due_date: { $lte: new Date() }, remainingBalance: { $gt: 0}};
+
+        const students = await Semester.find(query)
+            .populate(['course', 'student_id'])
+            .sort({ updatedAt: -1 })
+            .skip(skip)
+            .limit(limitNumber);
+        const total = await Semester.countDocuments(query);
+
+        res.status(200).json({ success: true, students, total, page: pageNumber, totalPages: Math.ceil(total / limitNumber) });
+       
+    }catch(error : any){
+        console.log(error)
+        res.status(500).json({ message: error.message || "Server Error" });   
+    }
+}
+
+export const notifiyStudentOverdue = async (req : Request, res : Response) => {
+    try{
+        const student = await Student.findById(req.params.id);
+
+        if(!student){
+            res.status(404).json({ message: 'Student not found' });
+            return;
+        }
+
+        const semester : any = await Semester.findById(req.query.semester).populate('course');
+
+        if(!semester){
+            res.status(404).json({ message: 'Semester not found'})
+            return;
+        }
+        
+        if (!semester.student_id.equals(student._id)) {
+            res.status(400).json({ message: 'This semester record does not belong to the selected student.' });
+            return;
+        }
+
+        await sendOverdueNotificationEmail(student, {
+            course: semester.course.name,
+            semester: `${semester.term} (${semester.schoolYear})`,
+            totalTuition: semester.totalTuition,
+            dueDate: formatDateLong(semester.due_date),
+            remainingBalance: semester.remainingBalance
+        })
+        res.status(200).json({ success: true });
+    }catch(error : any){
+        console.log(error)
+        res.status(500).json({ message: error.message || "Server Error" });   
     }
 }

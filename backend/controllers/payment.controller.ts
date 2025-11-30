@@ -125,26 +125,3 @@ export const getPaymentById = async (req : Request, res : Response) => {
         res.status(500).json({ message: error.message || "Server Error" });   
     }
 }
-
-export const getOverduePayments = async (req : Request, res : Response) => {
-    try{
-        const { page, limit } = req.query;
-        const pageNumber = parseInt(page as string) || 1;
-        const limitNumber = parseInt(limit as string) || 10;
-        const skip = (pageNumber - 1) * limitNumber;
-
-        const query : any = { due_date: { $lte: new Date() }, remainingBalance: { $gt: 0}};
-
-        const payments = await Semester.find(query)
-            .populate('student_id')
-            .sort({ updatedAt: -1 })
-            .skip(skip)
-            .limit(limitNumber);
-        const total = await Semester.countDocuments(query);
-
-        res.status(200).json({ success: true, payments, total, page: pageNumber, totalPages: Math.ceil(total / limitNumber) });
-       
-    }catch(error : any){
-        res.status(500).json({ message: error.message || "Server Error" });   
-    }
-}

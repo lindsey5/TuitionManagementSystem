@@ -14,6 +14,7 @@ import StudentPayments from "./pages/student/StudentPayments";
 import ProfileSettings from "./components/ui/ProfileSettings";
 import Registrars from "./pages/admin/Registrars";
 import RegistrarLayout from "./layouts/RegistrarLayout";
+import OverdueStudents from "./pages/Overdues";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="student-subjects/:id" element={<StudentSubjects />} />
             <Route path="payments" element={<Payments />} />
             <Route path="registrars" element={<Registrars />} />
+            <Route path="overdues" element={<OverdueStudents />} />
             <Route path="profile" element={<ProfileSettings<Admin> profileApiUrl="/api/admins" passwordApiUrl="/api/admins/password"/>} />
           </Route>
 
@@ -45,6 +47,7 @@ function App() {
             <Route path="student-subjects/:id" element={<StudentSubjects />} />
             <Route path="payments" element={<Payments />} />
             <Route path="profile" element={<ProfileSettings<Admin> profileApiUrl="/api/registrars" passwordApiUrl="/api/registrars/password"/>} />
+            <Route path="overdues" element={<OverdueStudents />} />
           </Route>
 
 
