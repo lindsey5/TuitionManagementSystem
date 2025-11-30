@@ -24,6 +24,7 @@ const AddEnrolledSubjectModal = ({ isOpen, onClose, student_id, semester }: Enro
 
     const addSubject = async () => {
         if(await confirmDialog('Are you sure?', 'Do you want to add this subject?')){
+            setLoading(true)
             const response = await postData('/api/enrolled-subjects', { student_id, semester, subject: subject?._id});
             setLoading(false);
             if (!response.success) {
@@ -37,6 +38,8 @@ const AddEnrolledSubjectModal = ({ isOpen, onClose, student_id, semester }: Enro
     }
 
     return (
+        <>
+        <LoadingScreen loading={loading}/>
         <Modal open={isOpen} onClose={onClose} sx={{ zIndex: 1 }}>
         <div className="absolute top-1/2 left-1/2 w-96 -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-md p-5">
             <LoadingScreen loading={loading} />
@@ -92,6 +95,7 @@ const AddEnrolledSubjectModal = ({ isOpen, onClose, student_id, semester }: Enro
             </div>
         </div>
         </Modal>
+        </>
     );
 };
 

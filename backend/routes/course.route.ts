@@ -5,7 +5,7 @@ import { requireAuth } from "../middlewares/auth";
 const router = Router();
 
 router.post('/', requireAuth('admin'), createCourse);
-router.get('/', requireAuth('admin'), getAllCourses);
+router.get('/', requireAuth('admin', 'registrar'), getAllCourses);
 router.put('/:id', requireAuth('admin'), editCourse);
 router.delete('/:id', requireAuth('admin'),  deleteCourse);
 

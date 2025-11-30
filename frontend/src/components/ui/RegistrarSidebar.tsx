@@ -1,4 +1,4 @@
-import { Banknote, Book, User, Users } from "lucide-react";
+import { AlarmClockOff, Banknote, Book, User, Users } from "lucide-react";
 import { useUser } from "../../contexts/UserContext";
 import Sidebar from "./Sidebar";
 
@@ -9,6 +9,7 @@ export default function RegistrarSidebar({ isCollapsed, setIsCollapsed } : { isC
         { id: 'subjects', icon: Book, label: 'Subjects', path: '/registrar' },
         { id: 'students', icon: Users, label: 'Students', path: '/registrar/students' },
         { id: 'payments', icon: Banknote, label: 'Payments', path: '/registrar/payments' },
+        { id: 'overdue', icon: AlarmClockOff, label: 'Overdues', path: '/registrar/overdues'},
         { id: 'profile', icon: User, label: 'Profile', path: '/registrar/profile' },
     ];
 

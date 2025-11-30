@@ -4,13 +4,18 @@ import { Title } from "../components/Text";
 import StudentModal from "../components/Modals/StudentModal"; // ✅ Change Modal
 import useFetch from "../hooks/useFetch";
 import PurpleTable from "../components/Table";
-import { CircularProgress, Pagination, Tooltip } from "@mui/material";
+import { CircularProgress, MenuItem, Pagination, Tooltip } from "@mui/material";
 import { deleteData } from "../utils/api";
 import { confirmDialog, errorAlert, successAlert } from "../utils/swal";
 import { Book } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDebounce } from "../hooks/useDebounce";
-import { SearchField } from "../components/Textfield";
+import { PurpleTextField, SearchField } from "../components/Textfield";
+import { useUser } from "../contexts/UserContext";
+
+type User = (Registrar | Admin) & {
+    role?: string;
+};
 
 const Students = () => {
     const [showModal, setShowModal] = useState(false);
@@ -19,7 +24,10 @@ const Students = () => {
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const searchDebounce = useDebounce(searchTerm, 500);
-    const { data, loading } = useFetch(`/api/students?page=${page}&searchTerm=${searchDebounce}`);
+    const { user } = useUser<User>();
+    const { data: courseData } = useFetch("/api/courses");
+    const [courseId, setCourseId] = useState('All');
+    const { data, loading } = useFetch(`/api/students?course=${courseId}&page=${page}&searchTerm=${searchDebounce}`);
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedStudent(undefined);
@@ -54,7 +62,7 @@ const Students = () => {
             <AddButton onClick={() => setShowModal(true)} label="Add Student" />
         </div>
 
-        <div className="mb-6 md:w-1/2">
+        <div className="mb-6 flex items-center gap-10">
             <SearchField 
                 onChange={(e) => {
                     setSearchTerm(e.target.value)
@@ -63,6 +71,26 @@ const Students = () => {
                 value={searchTerm}
                 placeholder="Search by firstname, middlename, lastname, student id or email"
             />
+            <div className="w-xl">
+                <PurpleTextField 
+                    select 
+                    label="Course" 
+                    value={courseId} 
+                    onChange={(e) => {
+                        setCourseId(e.target.value)
+                        setPage(1)
+                    }} 
+                    fullWidth 
+                    margin="normal"
+                >
+                <MenuItem value="All">All</MenuItem>
+                {courseData?.courses?.map((c: Course) => (
+                    <MenuItem key={c._id} value={c._id}>
+                    {c.name}
+                    </MenuItem>
+                ))}
+                </PurpleTextField>
+            </div>
         </div>
 
         {/* Modal */}
@@ -94,7 +122,7 @@ const Students = () => {
                         <Tooltip title="Enrolled Subjects">
                             <button
                                 className="flex items-center gap-2 py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-500 transition cursor-pointer"
-                                onClick={() => navigate(`/admin/student-subjects/${student._id}`)}
+                                onClick={() => navigate(`/${user?.role}/student-subjects/${student._id}`)}
                             >
                                 <Book />
                             </button>
