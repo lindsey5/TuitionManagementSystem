@@ -20,7 +20,7 @@ const AdminLayout = () => {
     }
 
     return (
-        <div className={`md:h-screen bg-gradient-to-r from-purple-100 to-white ${!isCollapsed ? 'pl-64' : 'pl-20'}`}>
+        <div className={`bg-gradient-to-r from-purple-100 to-white ${!isCollapsed ? 'pl-64' : 'pl-20'}`}>
             <AdminSidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed}/>
             <Outlet />
         </div>

@@ -218,7 +218,7 @@ export const notifiyStudentOverdue = async (req : Request, res : Response) => {
             res.status(404).json({ message: 'Semester not found'})
             return;
         }
-        
+
         if (!semester.student_id.equals(student._id)) {
             res.status(400).json({ message: 'This semester record does not belong to the selected student.' });
             return;
@@ -237,3 +237,45 @@ export const notifiyStudentOverdue = async (req : Request, res : Response) => {
         res.status(500).json({ message: error.message || "Server Error" });   
     }
 }
+
+export const getStudentCountPerCourse = async (req: Request, res: Response) => {
+    try {
+        const data = await Student.aggregate([
+            // Only count active students
+            { $match: { status: "active" } },
+
+            // Group students by course
+            {
+                $group: {
+                    _id: "$course",
+                    count: { $sum: 1 }
+                }
+            },
+
+            // Attach course name (from Course collection)
+            {
+                $lookup: {
+                    from: "courses",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "course_info"
+                }
+            },
+            { $unwind: "$course_info" },
+
+            // Clean output
+            {
+                $project: {
+                    _id: 0,
+                    courseId: "$_id",
+                    courseName: "$course_info.name",
+                    count: 1
+                }
+            }
+        ]);
+
+        res.status(200).json({ success: true, data });
+    } catch (error: any) {
+        res.status(500).json({ message: error.message || "Server Error" });
+    }
+};
