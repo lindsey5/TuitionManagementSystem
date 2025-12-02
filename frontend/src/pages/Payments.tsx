@@ -53,13 +53,14 @@ const Payments = () => {
                 <p className="text-center text-gray-500 mt-20">No payments found.</p>
             ) :
             <PurpleTable 
-                columns={['#', 'Student ID', 'Firstname', 'Lastname', 'Semester', "Amount", "Payment Date", "Action"]}
+                columns={['#', 'Student ID', 'Firstname', 'Lastname', 'Semester', "Year Level", "Amount", "Payment Date", "Action"]}
                 data={data?.payments.map((payment : Payment, i : number) => ({
                     '#' : i + 1,
                     'Student ID' : payment.student_id.student_id,
                     'Firstname' : payment.student_id.firstname,
                     "Lastname" : payment.student_id.lastname,
                     "Semester" : `${payment.semester.term} (${payment.semester.schoolYear})`,
+                    'Year Level' : payment.semester.yearLevel,
                     "Amount" : formatNumberToPeso(payment.amount),
                     "Payment Date" : formatDateTime(payment.createdAt),
                     "Action" : (

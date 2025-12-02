@@ -23,6 +23,7 @@ const PaymentModal = ({ isOpen, onClose } : PaymentModalProps) => {
     const { data : semesterData } = useFetch(semester ? `/api/semesters/data/${semester}` : '');
     const [isSuccess, setIsSuccess] = useState(false);
     const [paymentId, setPaymentId] = useState<string>();
+    const [loading, setLoading] = useState(false);
 
     const searchStudent = async () => {
         const response = await fetchData(`/api/students/search?searchTerm=${search}`);
@@ -44,11 +45,13 @@ const PaymentModal = ({ isOpen, onClose } : PaymentModalProps) => {
 
     const createPayment = async () => {
         if(await confirmDialog("Confirm Payment", "Are you sure you want to create this payment?")){
+            setLoading(true)
             const response = await postData('/api/payments', {
                 student_id: student?._id,
                 amount,
                 semester
             })
+            setLoading(false)
 
             if(!response.success){
                 await errorAlert('Failed', response.message || 'Something went wrong');
@@ -117,7 +120,7 @@ const PaymentModal = ({ isOpen, onClose } : PaymentModalProps) => {
                     Cancel
                 </button>}
                 <PurpleButton
-                    disabled={student ? (!semester || !amount || !student || !semesterData?.semester) : !search}
+                    disabled={loading && student ? (!semester || !amount || !student || !semesterData?.semester) : !search}
                     onClick={student ? createPayment : searchStudent}
                 >
                     {!student ? 'Search' : 'Create'}
