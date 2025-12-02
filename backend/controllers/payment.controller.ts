@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getTotalPaid } from "../services/studentService";
 import Payment from "../models/Payment";
 import Semester from "../models/Semester";
+import { AuthenticatedRequest } from "../types/types";
 
 export const createPayment = async (req: Request, res: Response) => {
     try {
@@ -94,15 +95,14 @@ export const getPayments = async (req : Request, res : Response) => {
     }
 }
 
-export const getMyPayments = async (req : Request, res : Response) => {
-
+export const getMyPayments = async (req : AuthenticatedRequest, res : Response) => {
     try{
         const { page, limit } = req.query;
         const pageNumber = parseInt(page as string) || 1;
         const limitNumber = parseInt(limit as string) || 10;
         const skip = (pageNumber - 1) * limitNumber;
 
-        const payments = await Payment.find()
+        const payments = await Payment.find({ student_id: req.user_id })
             .populate(['semester', 'student_id'])
             .sort({ createdAt: -1 })
             .skip(skip)
