@@ -15,6 +15,7 @@ export interface ISemester extends Document {
   remainingBalance: number;
   classification: "regular" | "full_scholar" | "partial_scholar" | "academic_grant" | "athlete_scholar" | "sponsored"
   enrolledsubjects?: IEnrolledSubject[];
+  yearLevel: number;
   status: 'active' | 'removed';
 }
 
@@ -87,6 +88,12 @@ const SemesterSchema: Schema<ISemester> = new Schema(
       enum: ['active', 'removed'],
       default: 'active',
       required: true
+    },
+    yearLevel: {
+      type: Number,
+      enum: [1, 2, 3, 4],
+      default: 1,
+      required: true,
     }
   },
   { timestamps: true }

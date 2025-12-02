@@ -48,6 +48,7 @@ interface Semester {
     due_date?: Date;
     remainingBalance: number;
     totalTuition: number;
+    yearLevel: number;
     classification: "regular" | "full_scholar" | "partial_scholar" | "academic_grant" | "athlete_scholar" | "sponsored"
 }
 

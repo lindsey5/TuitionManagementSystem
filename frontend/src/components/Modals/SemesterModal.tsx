@@ -21,6 +21,7 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
     const [enrollmentStatus, setEnrollmentStatus] = useState<"Regular" | "Irregular">("Regular");
     const [classification, setClassification] = useState<Semester['classification']>('regular');
     const [discount, setDiscount] = useState(0);
+    const [yearLevel, setYearLevel] = useState(1);
     const [pricePerUnit, setPricePerUnit] = useState<number>();
     const [loading, setLoading] = useState(false);
 
@@ -68,7 +69,8 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
                 pricePerUnit,
                 classification,
                 discount,
-                due_date: dueDate
+                due_date: dueDate,
+                yearLevel,
             };
 
             const response = await postData("/api/semesters", payload);
@@ -134,6 +136,14 @@ const SemesterModal = ({ isOpen, onClose, student }: SemesterModalProps) => {
                     <MenuItem value="athlete_scholar">Athlete Scholar</MenuItem>
                     <MenuItem value="sponsored">Sponsored</MenuItem>
                 </PurpleSelect>
+
+                <PurpleTextField select label="Year Level" value={yearLevel} onChange={(e) => setYearLevel(Number(e.target.value))} fullWidth margin="normal">
+                {[1, 2, 3, 4].map((level) => (
+                    <MenuItem key={level} value={level}>
+                    {level}
+                    </MenuItem>
+                ))}
+                </PurpleTextField>
 
                 {classification !== 'full_scholar' && classification !== 'regular' && <PurpleTextField
                     label="Discount %"
